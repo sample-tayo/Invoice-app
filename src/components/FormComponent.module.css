@@ -1,0 +1,7 @@
+.container {
+  width: 93%;
+  transition:
+    left 0.3s ease,
+    transform 0.3s ease;
+  overflow: hidden;
+}
