@@ -20,8 +20,14 @@
   }
 }
 
+@media (max-width: 468px) {
+  .container > :first-child {
+    margin-top: 6.5rem;
+  }
+}
+
 .container > :first-child {
-  margin-top: 6.5rem;
+  margin-top: 12.5rem;
 }
 
 /* Default styles for larger screens */
