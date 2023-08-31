@@ -20,6 +20,10 @@
   }
 }
 
+.container > :first-child {
+  margin-top: 6.5rem;
+}
+
 /* Default styles for larger screens */
 .customScroll {
   overflow-y: auto;

@@ -92,7 +92,7 @@ const FormComponent = ({ showForm, setShowForm, fromSidebar }) => {
               height: "100vh",
               overflowY: "auto",
             }}
-            className="mx-auto w-full space-y-4 overflow-y-auto bg-backgroundDark p-4 pb-20 md:w-3/6"
+            className="mx-auto w-full space-y-4 overflow-y-auto bg-backgroundDark p-4 pb-32 md:w-3/6"
           >
             {/* Bill From */}
             <div className="p-4">
