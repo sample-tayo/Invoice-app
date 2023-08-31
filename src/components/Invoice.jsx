@@ -37,7 +37,7 @@ function Invoice({ invoice }) {
         <div
           className={`min-content w-26 flex h-8 items-center justify-around  rounded bg-opacity-10 px-3`}
           style={{
-            backgroundColor: `var(--${invoice.status})`,
+            backgroundColor: `var(--${invoice.status}-with-opacity)`,
             color: `var(--${invoice.status})`,
           }}
         >

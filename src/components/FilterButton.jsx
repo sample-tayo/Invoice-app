@@ -2,7 +2,7 @@ import { useState } from "react";
 
 const FilterButton = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState("Filter by status");
+  const [selectedOption, setSelectedOption] = useState("Filter");
 
   const options = ["paid", "pending", "draft"];
 
@@ -17,7 +17,7 @@ const FilterButton = () => {
       <div>
         <button
           type="button"
-          className="inline-flex justify-center w-full rounded-md px-4 py-2 text-sm font-medium text-item-light  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          className="inline-flex w-full justify-center rounded-md px-4 py-2 text-sm font-medium text-item-light  focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
           onClick={() => setIsOpen(!isOpen)}
         >
           {selectedOption}
@@ -37,8 +37,13 @@ const FilterButton = () => {
         </button>
       </div>
       {isOpen && (
-        <div className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
-          <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+        <div className="absolute right-0 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5">
+          <div
+            className="py-1"
+            role="menu"
+            aria-orientation="vertical"
+            aria-labelledby="options-menu"
+          >
             {options.map((option) => (
               <button
                 key={option}

@@ -13,15 +13,17 @@ export default function Head({ onNewInvoiceClick, data }) {
         <FilterButton />
 
         <div
-          className=" flex cursor-pointer items-center gap-3 rounded-3xl bg-hover px-3 py-3 text-item-light"
           onClick={onNewInvoiceClick}
+          className="flex w-20 cursor-pointer flex-row items-center gap-1 rounded-3xl bg-hover px-3 py-3 text-item-light md:w-auto"
         >
           <img
-            src="/src/assets/images/icon-plus.svg"
+            src="/assets/images/icon-plus.svg"
             alt=""
-            className="h-5 w-5 rounded-lg bg-white"
+            className="h-5 w-5 md:rounded-lg md:bg-white"
           />
-          <p>New Invoice</p>
+          <p className="md:inline-block">
+            New <span className="hidden md:inline-block">Invoice</span>{" "}
+          </p>
         </div>
       </div>
     </div>
