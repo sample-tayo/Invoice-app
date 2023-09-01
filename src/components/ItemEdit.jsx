@@ -1,18 +1,25 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import GoBack from "./GoBack";
 import { useState } from "react";
 import PropTypes from "prop-types";
+import FormComponent from "./FormComponent";
 
-const ItemEdit = ({ data }) => {
+const ItemEdit = ({
+  data,
+  removeFromInvoicesData,
+  invoicesData,
+  setInvoicesData,
+  onClickEditForm,
+}) => {
   const { id } = useParams(); // Get the invoice ID from URL parameters
 
   // Find the corresponding invoice data
   const invoice = data.find((item) => item.id === id);
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [status, setStatus] = useState(invoice.status);
 
   const {
-    status,
     createdAt,
     paymentDue,
     clientName,
@@ -23,9 +30,37 @@ const ItemEdit = ({ data }) => {
     senderAddress,
   } = invoice;
 
+  const navigate = useNavigate();
   const handleDelete = () => {
-    console.log("Invoice deleted");
+    // Call the removeFromInvoicesData function with the item's id
+    removeFromInvoicesData(id);
     setShowDeleteModal(false); // Close the modal after deletion
+
+    // Using history.push to navigate back to the home page
+    navigate("/");
+  };
+
+  const handleMarkAsPaid = () => {
+    // Find the index of the invoice with the given id in your data
+    const index = invoicesData.findIndex((item) => item.id === id);
+
+    if (index !== -1) {
+      // Update the status to "Paid" in the invoicesData array
+      invoicesData[index].status = "Paid";
+
+      // Update the state to trigger a re-render
+      setInvoicesData([...invoicesData]);
+
+      // Update the status state
+      setStatus("Paid");
+
+      // Log the updated data
+      console.log("Updated Invoices Data: ", invoicesData);
+    }
+  };
+
+  const handleEditForm = () => {
+    onClickEditForm(); // Call the onClickEditForm prop to toggle showForm
   };
   return (
     <>
@@ -41,15 +76,27 @@ const ItemEdit = ({ data }) => {
                 </p>
               </div>
 
-              <div className="flex items-center gap-1 rounded bg-pending bg-opacity-20 px-4 py-2 font-semibold text-pending">
-                <div className={`h-3 w-3 rounded-full bg-pending`}></div>
-                <p>{status}</p>
+              <div
+                className="flex items-center gap-1 rounded bg-opacity-20 px-4 py-2 font-semibold"
+                style={{
+                  backgroundColor: `var(--${status}-with-opacity)`,
+                  color: `var(--${status})`,
+                }}
+              >
+                <div
+                  className={`h-3 w-3 rounded-full`}
+                  style={{
+                    backgroundColor: `var(--${status})`,
+                  }}
+                ></div>
+                <p className="capitalize">{status}</p>
               </div>
             </div>
 
             {/* if its on mobile i dont want to show this part */}
             <div className="hidden w-full items-center justify-end space-x-2 md:flex">
               <button
+                onClick={handleEditForm}
                 type="button"
                 className="rounded bg-secondary px-4 py-2 text-sm font-semibold text-white hover:bg-secondary-hover"
               >
@@ -70,6 +117,7 @@ const ItemEdit = ({ data }) => {
                 />
               )}
               <button
+                onClick={handleMarkAsPaid}
                 type="button"
                 className="rounded bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primaryHover"
               >
@@ -221,6 +269,7 @@ const ItemEdit = ({ data }) => {
           </div>
         </div>
       </div>
+      <FormComponent />
     </>
   );
 };
@@ -264,6 +313,15 @@ DeleteConfirmationModal.propTypes = {
 };
 
 ItemEdit.propTypes = {
+  invoicesData: PropTypes.array.isRequired,
+  setInvoicesData: PropTypes.func.isRequired,
+
+  onClickEditForm: PropTypes.func.isRequired,
+  showForm: PropTypes.bool.isRequired,
+  setShowForm: PropTypes.any.isRequired,
+  fromSidebar: PropTypes.bool.isRequired,
+  // handleMarkAsPaid: PropTypes.func.isRequired,
+  removeFromInvoicesData: PropTypes.func.isRequired,
   data: PropTypes.arrayOf(
     PropTypes.shape({
       status: PropTypes.string.isRequired,

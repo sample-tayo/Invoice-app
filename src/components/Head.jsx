@@ -3,7 +3,7 @@ import FilterButton from "./FilterButton";
 
 export default function Head({ onNewInvoiceClick, data }) {
   return (
-    <div className="mx-8 mt-10 flex items-center justify-between text-item-light md:mx-0 md:mt-28 md:w-3/5">
+    <div className="mx-8 mt-10 flex items-center justify-between dark:text-title-dark md:mx-0 md:mt-28 md:w-3/5">
       <div className="flex flex-col items-start justify-between">
         <h2 className="text-2xl font-bold">Invoices</h2>
         <p className="text-xs">There are {data.length} total Invoices</p>
@@ -14,7 +14,7 @@ export default function Head({ onNewInvoiceClick, data }) {
 
         <div
           onClick={onNewInvoiceClick}
-          className="flex w-20 cursor-pointer flex-row items-center gap-1 rounded-3xl bg-hover px-3 py-3 text-item-light md:w-auto"
+          className="flex w-20 cursor-pointer flex-row items-center gap-1 rounded-3xl px-3 py-3 dark:bg-hover dark:text-title-dark md:w-auto"
         >
           <img
             src="/assets/images/icon-plus.svg"

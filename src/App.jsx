@@ -14,6 +14,19 @@ import data from "./data/data.json";
 export default function App() {
   const [invoicesData, setInvoicesData] = useState(data);
   const [showForm, setShowForm] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(true);
+
+  // func to delete items from the data
+  const removeFromInvoicesData = (id) => {
+    // Use the `id` to filter out the item to be deleted
+    const updatedData = invoicesData.filter((item) => item.id !== id);
+    setInvoicesData(updatedData);
+  };
+
+  const toggleDarkMode = () => {
+    setIsDarkMode(!isDarkMode);
+    console.log("heloo");
+  };
 
   const openForm = () => {
     setShowForm(true);
@@ -26,14 +39,13 @@ export default function App() {
 
   const router = createBrowserRouter(
     createRoutesFromElements(
-      <Route to="/" element={<RootLayout />}>
+      <Route to="/" element={<RootLayout toggleDarkMode={toggleDarkMode} />}>
         <Route
           index
           element={
             <Home
               invoicesData={invoicesData}
               setInvoicesData={setInvoicesData}
-              // onNewInvoiceClick={openForm}
               openForm={openForm}
               showForm={showForm}
               fromSidebar={showForm}
@@ -42,7 +54,18 @@ export default function App() {
             />
           }
         />
-        <Route path="/invoices/:id" element={<ItemEdit data={data} />} />
+        <Route
+          path="/invoices/:id"
+          element={
+            <ItemEdit
+              data={data}
+              removeFromInvoicesData={removeFromInvoicesData}
+              invoicesData={invoicesData}
+              setInvoicesData={setInvoicesData}
+              onClickEditForm={openForm}
+            />
+          }
+        />
       </Route>,
     ),
   );
@@ -52,37 +75,4 @@ export default function App() {
       <RouterProvider router={router} />
     </>
   );
-}
-
-{
-  /* <FormComponent
-        showForm={showForm}
-        setShowForm={setShowForm}
-        onCloseForm={closeForm}
-        fromSidebar={showForm}
-      />
-      <Routes>
-        <Route path="/invoices/:id" element={<ItemEdit data={data} />} />
-      </Routes> */
-}
-
-{
-  /* <Router>
-<div className="flex flex-col bg-backgroundDark md:flex-row">
-  <Sidebar />
-  <main className="relative flex h-screen flex-1 flex-col items-center overflow-y-auto">
-    <Head onNewInvoiceClick={openForm} data={invoicesData} />
-    <InvoicesList data={invoicesData} setInvoicesData={setInvoicesData} />
-    <FormComponent
-      showForm={showForm}
-      setShowForm={setShowForm}
-      onCloseForm={closeForm}
-      fromSidebar={showForm}
-    />
-    <Routes>
-      <Route path="/invoices/:id" element={<ItemEdit data={data} />} />
-    </Routes>
-  </main>
-</div>
-</Router> */
 }

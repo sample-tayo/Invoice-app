@@ -1,6 +1,8 @@
-export default function Sidebar() {
+import PropTypes from "prop-types";
+
+export default function Sidebar({ toggleDarkMode }) {
   return (
-    <aside className="sticky top-0 z-30 h-auto w-screen bg-secondary px-4 md:h-screen md:w-24 md:px-0">
+    <aside className="sticky top-0 z-30 h-auto w-screen px-4 dark:bg-nav-dark md:h-screen md:w-24 md:px-0">
       <nav className="flex h-full flex-row items-center justify-between shadow-sm md:flex-col">
         <img
           src="/assets/images/newlogo.svg"
@@ -9,7 +11,12 @@ export default function Sidebar() {
         />
 
         <div className="flex flex-row items-center justify-center gap-5 py-3 md:flex-col">
-          <img src="/assets/images/icon-sun.svg" alt="" className="w-10" />
+          <img
+            onClick={toggleDarkMode}
+            src="/assets/images/icon-sun.svg"
+            alt=""
+            className="w-10"
+          />
           <img
             src="https://ui-avatars.com/api/?background=c7d2fe&color=3730a3&bold=true"
             alt=""
@@ -20,3 +27,6 @@ export default function Sidebar() {
     </aside>
   );
 }
+Sidebar.propTypes = {
+  toggleDarkMode: PropTypes.func.isRequired,
+};
