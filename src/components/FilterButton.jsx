@@ -13,11 +13,11 @@ const FilterButton = () => {
   };
 
   return (
-    <div className="relative inline-block text-left">
+    <div className="relative inline-block bg-backgroundDark text-left">
       <div>
         <button
           type="button"
-          className="inline-flex w-full justify-center rounded-md px-4 py-2 text-sm font-medium text-item-light  focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+          className="inline-flex w-full justify-center rounded-md px-4 py-2 text-sm font-medium text-item-light  focus:border-none focus:outline-none focus:ring-2 focus:ring-offset-2"
           onClick={() => setIsOpen(!isOpen)}
         >
           {selectedOption}
@@ -47,7 +47,7 @@ const FilterButton = () => {
             {options.map((option) => (
               <button
                 key={option}
-                className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                className="block w-full px-4 py-2 text-sm font-semibold capitalize text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                 onClick={() => handleOptionClick(option)}
                 role="menuitem"
               >

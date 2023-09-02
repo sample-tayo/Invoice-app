@@ -1,12 +1,12 @@
 import { useState, useEffect, useRef } from "react";
 import styles from "./FormComponent.module.css";
 import PropTypes from "prop-types";
-import { Formik, Field, Form, ErrorMessage } from "formik";
+import { Formik, Field, Form, ErrorMessage, FieldArray } from "formik";
 import * as Yup from "yup";
-
 // datepicker library import
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { format } from "date-fns";
 
 const validationSchema = Yup.object().shape({
   billFromStreetAddress: Yup.string().required("Required"),
@@ -20,9 +20,24 @@ const validationSchema = Yup.object().shape({
   billToPostCode: Yup.string().required("Required"),
   billToCountry: Yup.string().required("Required"),
   description: Yup.string().required("Required"),
+  paymentTerms: Yup.string().required("Payment Terms is required"),
+  items: Yup.array().of(
+    Yup.object().shape({
+      itemName: Yup.string().required("Item Name is required"),
+      quantity: Yup.number()
+        .min(1, "Quantity must be at least 1")
+        .required("Quantity is required")
+        .positive()
+        .integer(),
+      price: Yup.number()
+        .min(0.01, "Price must be at least 0.01")
+        .required("Price is required")
+        .positive(),
+    }),
+  ),
 });
 
-const FormComponent = ({ showForm, setShowForm, fromSidebar }) => {
+const FormComponent = ({ showForm, setShowForm, fromSidebar, addInvoice }) => {
   const [selectedDate, setSelectedDate] = useState(null);
 
   const formRef = useRef(null); // Reference to the Form component, Ref introduced because of click outside
@@ -42,17 +57,63 @@ const FormComponent = ({ showForm, setShowForm, fromSidebar }) => {
     };
   });
 
-  const handleSubmit = (values, { setSubmitting }) => {
-    if (
-      Object.keys(values).length > 0 &&
-      !validationSchema.isValidSync(values)
-    ) {
-      console.log("Form submitted successfully:", values);
-    } else {
-      console.log("Form has errors or empty fields");
-    }
+  const calculateTotal = (quantity, price) => {
+    return quantity * price;
+  };
 
-    setSubmitting(false);
+  const handleSubmit = (values) => {
+    console.log("Form:", values);
+
+    // Format createdAt and paymentDue dates
+    const createdAtFormatted = format(new Date(), "yyyy-MM-dd");
+    const paymentDueFormatted = format(selectedDate, "yyyy-MM-dd");
+
+    // Convert quantity and price to numbers
+    const quantity = parseInt(values.quantity, 10);
+    const price = parseFloat(values.price);
+
+    // Calculate the total based on quantity and price
+    const total = quantity * price;
+
+    // Construct the newInvoice object
+    const newInvoice = {
+      id: "",
+      createdAt: createdAtFormatted,
+      paymentDue: paymentDueFormatted,
+      description: values.description,
+      paymentTerms: values.paymentTerms,
+      clientName: values.clientName,
+      clientEmail: values.clientEmail,
+      status: "pending",
+      senderAddress: {
+        street: values.billFromStreetAddress,
+        city: values.billFromCity,
+        postCode: values.billFromPostCode,
+        country: values.billFromCountry,
+      },
+      clientAddress: {
+        street: values.billToStreetAddress,
+        city: values.billToCity,
+        postCode: values.billToPostCode,
+        country: values.billToCountry,
+      },
+      items: [
+        {
+          itemName: values.itemName, // Assuming you want to use the first item
+          quantity: quantity,
+          price: price,
+          total: total,
+        },
+      ],
+      total: total,
+    };
+    console.log(newInvoice);
+
+    // Call the addInvoice function with the new invoice data
+    addInvoice(newInvoice);
+
+    // Close the form
+    setShowForm(false);
   };
 
   return (
@@ -63,7 +124,7 @@ const FormComponent = ({ showForm, setShowForm, fromSidebar }) => {
           : `transform ${fromSidebar ? "-" : ""}translate-x-full`
       } ${styles.container}`}
     >
-      <h3 className="w-full bg-backgroundDark pl-8 pt-5 text-3xl font-extrabold text-light md:w-3/6 md:pl-8 md:pt-8">
+      <h3 className="w-full bg-backgroundDark pb-8 pl-8 pt-5 text-3xl font-extrabold text-title-dark md:w-3/6 md:px-12  md:pt-8">
         Create Invoice
       </h3>
       <Formik
@@ -79,11 +140,13 @@ const FormComponent = ({ showForm, setShowForm, fromSidebar }) => {
           billToPostCode: "",
           billToCountry: "",
           description: "",
+          // initial values for item qty
+          items: [{ itemName: "", quantity: 0, price: 0.0 }],
         }}
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
       >
-        {({ errors, touched }) => (
+        {({ values, errors, touched, isSubmitting }) => (
           <Form
             ref={formRef}
             style={{
@@ -92,10 +155,10 @@ const FormComponent = ({ showForm, setShowForm, fromSidebar }) => {
               height: "100vh",
               overflowY: "auto",
             }}
-            className="mx-auto w-full space-y-4 overflow-y-auto bg-backgroundDark p-4 pb-32 md:w-3/6"
+            className="mx-auto w-full space-y-4 overflow-y-auto bg-backgroundDark p-4 pb-32 md:w-3/6 md:px-12"
           >
             {/* Bill From */}
-            <div className="p-4">
+            <div className="p-4 md:p-0">
               <h2
                 className="mb-6 text-sm font-semibold text-primary"
                 style={{ fontSize: "0.8rem" }}
@@ -106,7 +169,7 @@ const FormComponent = ({ showForm, setShowForm, fromSidebar }) => {
               <div className="mt-2">
                 {/* labelfor street address */}
                 <label
-                  className="mb-1 block text-sm text-light"
+                  className="mb-1 block text-sm text-dark"
                   style={{ fontSize: "0.7rem" }}
                   htmlFor="billFromStreetAddress"
                 >
@@ -133,10 +196,10 @@ const FormComponent = ({ showForm, setShowForm, fromSidebar }) => {
                 />
               </div>
 
-              <div className="mt-2 flex space-x-2">
+              <div className="mt-2 flex gap-8  space-x-2">
                 <div className="flex-grow">
                   <label
-                    className="mb-1 block text-sm text-light"
+                    className="mb-1 block text-sm text-dark"
                     style={{ fontSize: "0.7rem" }}
                     htmlFor="billFromCity"
                   >
@@ -164,7 +227,7 @@ const FormComponent = ({ showForm, setShowForm, fromSidebar }) => {
 
                 <div className="flex-grow">
                   <label
-                    className="mb-1 block text-sm text-light"
+                    className="mb-1 block text-sm text-dark"
                     style={{ fontSize: "0.7rem" }}
                     htmlFor="billFromPostCode"
                   >
@@ -192,7 +255,7 @@ const FormComponent = ({ showForm, setShowForm, fromSidebar }) => {
 
                 <div className="flex-grow">
                   <label
-                    className="mb-1 block text-sm text-light"
+                    className="mb-1 block text-sm text-dark"
                     style={{ fontSize: "0.7rem" }}
                     htmlFor="billFromCountry"
                   >
@@ -221,7 +284,7 @@ const FormComponent = ({ showForm, setShowForm, fromSidebar }) => {
             </div>
 
             {/* Bill To */}
-            <div className=" p-4">
+            <div className=" p-4 md:p-0">
               <h2
                 className="mb-6 text-sm font-semibold text-primary"
                 style={{ fontSize: "0.8rem" }}
@@ -230,7 +293,7 @@ const FormComponent = ({ showForm, setShowForm, fromSidebar }) => {
               </h2>
               <div className="mt-2">
                 <label
-                  className="mb-1 block text-sm text-light"
+                  className="mb-1 block text-sm text-dark"
                   style={{ fontSize: "0.7rem" }}
                   htmlFor="clientName"
                 >
@@ -253,7 +316,7 @@ const FormComponent = ({ showForm, setShowForm, fromSidebar }) => {
               </div>
               <div className="mt-2">
                 <label
-                  className="mb-1 block text-sm text-light"
+                  className="mb-1 block text-sm text-dark"
                   style={{ fontSize: "0.7rem" }}
                   htmlFor="clientEmail"
                 >
@@ -276,7 +339,7 @@ const FormComponent = ({ showForm, setShowForm, fromSidebar }) => {
               </div>
               <div className="mt-2">
                 <label
-                  className="mb-1 block text-sm text-light"
+                  className="mb-1 block text-sm text-dark"
                   style={{ fontSize: "0.7rem" }}
                   htmlFor="billToStreetAddress"
                 >
@@ -301,7 +364,7 @@ const FormComponent = ({ showForm, setShowForm, fromSidebar }) => {
               <div className="mt-2 flex space-x-2">
                 <div className="flex-grow">
                   <label
-                    className="mb-1 block text-sm text-light"
+                    className="mb-1 block text-sm text-dark"
                     style={{ fontSize: "0.7rem" }}
                     htmlFor="billToCity"
                   >
@@ -327,7 +390,7 @@ const FormComponent = ({ showForm, setShowForm, fromSidebar }) => {
 
                 <div className="flex-grow">
                   <label
-                    className="mb-1 block text-sm text-light"
+                    className="mb-1 block text-sm text-dark"
                     style={{ fontSize: "0.7rem" }}
                     htmlFor="billToPostCode"
                   >
@@ -355,7 +418,7 @@ const FormComponent = ({ showForm, setShowForm, fromSidebar }) => {
 
                 <div className="flex-grow">
                   <label
-                    className="mb-1 block text-sm text-light"
+                    className="mb-1 block text-sm text-dark"
                     style={{ fontSize: "0.7rem" }}
                     htmlFor="billToCountry"
                   >
@@ -385,7 +448,7 @@ const FormComponent = ({ showForm, setShowForm, fromSidebar }) => {
               {/* description */}
               <div className="mt-2">
                 <label
-                  className="mb-1 block text-sm text-light"
+                  className="mb-1 block text-sm text-dark"
                   style={{ fontSize: "0.7rem" }}
                   htmlFor="description"
                 >
@@ -415,7 +478,7 @@ const FormComponent = ({ showForm, setShowForm, fromSidebar }) => {
                 <div className="flex flex-grow flex-col space-y-1">
                   <label
                     htmlFor="invoiceDate"
-                    className="mb-1 block text-sm text-light"
+                    className="mb-1 block text-sm text-dark"
                     style={{ fontSize: "0.7rem" }}
                   >
                     Invoice Date
@@ -425,7 +488,7 @@ const FormComponent = ({ showForm, setShowForm, fromSidebar }) => {
                       selected={selectedDate}
                       onChange={(date) => setSelectedDate(date)}
                       dateFormat="MMM dd, yyyy"
-                      className="w-full rounded bg-bg-dark p-2 font-semibold text-light  focus:ring focus:ring-blue-300"
+                      className="w-full rounded bg-bg-dark p-2 font-semibold text-dark  focus:ring focus:ring-blue-300"
                     />
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -447,30 +510,196 @@ const FormComponent = ({ showForm, setShowForm, fromSidebar }) => {
                 <div className="flex flex-grow flex-col space-y-1">
                   <label
                     htmlFor="paymentTerms"
-                    className="mb-1 block text-sm text-light"
+                    className="mb-1 block text-sm text-dark"
                     style={{ fontSize: "0.7rem" }}
                   >
                     Payment Terms
                   </label>
-                  <select
+                  <Field
+                    as="select"
                     id="paymentTerms"
                     name="paymentTerms"
-                    className="w-full rounded bg-bg-dark p-2 font-semibold text-light focus:ring focus:ring-blue-300"
+                    className={`w-full rounded bg-bg-dark p-2 font-semibold text-dark focus:ring focus:ring-blue-300 ${
+                      errors.paymentTerms && touched.paymentTerms
+                        ? "border-red-500"
+                        : ""
+                    }`}
                   >
-                    <option value="Next 7 days">Next 7 days</option>
-                    <option value="Next 14 days">Next 14 days</option>
-                    <option value="Next 30 days">Next 30 days</option>
-                  </select>
+                    <option value="7">Next 7 days</option>
+                    <option value="14">Next 14 days</option>
+                    <option value="30">Next 30 days</option>
+                  </Field>
+                  <ErrorMessage
+                    name="paymentTerms"
+                    component="div"
+                    className="text-sm text-red-500"
+                  />
                 </div>
               </div>
-            </div>
+              <FieldArray name="items">
+                {({ push, remove }) => (
+                  <div className="mt-4 flex flex-col gap-4 ">
+                    {values.items.map((item, index) => (
+                      <div className="flex items-center space-x-4" key={index}>
+                        {/* Item Name */}
+                        <div className="flex-1">
+                          <label
+                            className="mb-1 block text-sm text-dark"
+                            style={{ fontSize: "0.7rem" }}
+                            htmlFor={`items.${index}.itemName`}
+                          >
+                            Item Name
+                          </label>
+                          <Field
+                            type="text"
+                            name={`items.${index}.itemName`}
+                            className={`w-full rounded bg-bg-dark p-2 font-semibold text-title-dark ${
+                              errors.items &&
+                              errors.items[index] &&
+                              errors.items[index].itemName &&
+                              touched.items &&
+                              touched.items[index] &&
+                              touched.items[index].itemName
+                                ? "border-red-500"
+                                : ""
+                            }`}
+                          />
+                          {errors.items &&
+                            errors.items[index] &&
+                            errors.items[index].itemName &&
+                            touched.items &&
+                            touched.items[index] &&
+                            touched.items[index].itemName && (
+                              <div className="text-sm text-red-500">
+                                {errors.items[index].itemName}
+                              </div>
+                            )}
+                        </div>
 
-            <button
-              type="button"
-              className="w-full rounded-2xl bg-gray-300  p-2"
-            >
-              Add New Item
-            </button>
+                        {/* Quantity */}
+                        <div className="flex-1">
+                          <label
+                            className="mb-1 block text-sm text-dark"
+                            style={{ fontSize: "0.7rem" }}
+                            htmlFor={`items.${index}.quantity`}
+                          >
+                            Quantity
+                          </label>
+                          <Field
+                            type="number"
+                            name={`items.${index}.quantity`}
+                            className={`w-full rounded bg-bg-dark p-2 font-semibold text-title-dark ${
+                              errors.items &&
+                              errors.items[index] &&
+                              errors.items[index].quantity &&
+                              touched.items &&
+                              touched.items[index] &&
+                              touched.items[index].quantity
+                                ? "border-red-500"
+                                : ""
+                            }`}
+                          />
+                          {errors.items &&
+                            errors.items[index] &&
+                            errors.items[index].quantity &&
+                            touched.items &&
+                            touched.items[index] &&
+                            touched.items[index].quantity && (
+                              <div className="text-sm text-red-500">
+                                {errors.items[index].quantity}
+                              </div>
+                            )}
+                        </div>
+
+                        {/* Price */}
+                        <div className="flex-1">
+                          <label
+                            className="mb-1 block text-sm text-dark"
+                            style={{ fontSize: "0.7rem" }}
+                            htmlFor={`items.${index}.price`}
+                          >
+                            Price
+                          </label>
+                          <Field
+                            type="number"
+                            name={`items.${index}.price`}
+                            className={`w-full rounded bg-bg-dark p-2 font-semibold text-title-dark ${
+                              errors.items &&
+                              errors.items[index] &&
+                              errors.items[index].price &&
+                              touched.items &&
+                              touched.items[index] &&
+                              touched.items[index].price
+                                ? "border-red-500"
+                                : ""
+                            }`}
+                          />
+                          {errors.items &&
+                            errors.items[index] &&
+                            errors.items[index].price &&
+                            touched.items &&
+                            touched.items[index] &&
+                            touched.items[index].price && (
+                              <div className="text-sm text-red-500">
+                                {errors.items[index].price}
+                              </div>
+                            )}
+                        </div>
+
+                        {/* Total */}
+                        <div className="flex-1 flex-col items-center justify-between text-title-dark">
+                          <p
+                            className="mb-1 block text-sm text-dark"
+                            style={{ fontSize: "0.7rem" }}
+                          >
+                            Total
+                          </p>
+                          <p>
+                            <span>
+                              {calculateTotal(item.quantity, item.price)}
+                            </span>
+                          </p>
+                        </div>
+
+                        {/* Delete Icon */}
+                        <div className="flex-none">
+                          <button
+                            type="button"
+                            onClick={() => remove(index)}
+                            className="border-none bg-transparent text-delete"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                              className="h-6 w-6 cursor-pointer"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M6 18L18 6M6 6l12 12"
+                              />
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+
+                    <button
+                      type="button"
+                      onClick={() =>
+                        push({ itemName: "", quantity: "", price: "" })
+                      }
+                      className="rounded bg-blue-500 px-4 py-2 font-semibold text-white hover:bg-blue-600"
+                    >
+                      Add Item
+                    </button>
+                  </div>
+                )}
+              </FieldArray>
+            </div>
 
             <div className="flex justify-between bg-backgroundDark p-4">
               <button type="button" className="rounded-2xl bg-gray-300 p-2">
@@ -484,6 +713,8 @@ const FormComponent = ({ showForm, setShowForm, fromSidebar }) => {
                   Save to Draft
                 </button>
                 <button
+                  onClick={handleSubmit}
+                  disabled={isSubmitting}
                   type="submit"
                   className="rounded-2xl bg-green-500 p-2 text-white"
                 >
@@ -501,7 +732,7 @@ const FormComponent = ({ showForm, setShowForm, fromSidebar }) => {
 FormComponent.propTypes = {
   showForm: PropTypes.bool.isRequired,
   setShowForm: PropTypes.any.isRequired,
-
+  addInvoice: PropTypes.func,
   fromSidebar: PropTypes.bool.isRequired,
 
   // onCloseForm: PropTypes.func.isRequired,

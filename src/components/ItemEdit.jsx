@@ -5,16 +5,18 @@ import PropTypes from "prop-types";
 import FormComponent from "./FormComponent";
 
 const ItemEdit = ({
-  data,
   removeFromInvoicesData,
   invoicesData,
   setInvoicesData,
   onClickEditForm,
+  // space
+  showForm,
+  setShowForm,
 }) => {
   const { id } = useParams(); // Get the invoice ID from URL parameters
 
   // Find the corresponding invoice data
-  const invoice = data.find((item) => item.id === id);
+  const invoice = invoicesData.find((item) => item.id === id);
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [status, setStatus] = useState(invoice.status);
@@ -28,6 +30,7 @@ const ItemEdit = ({
     items,
     total,
     senderAddress,
+    description,
   } = invoice;
 
   const navigate = useNavigate();
@@ -136,7 +139,7 @@ const ItemEdit = ({
                   {id}
                 </p>
                 <p className="text-sm text-dark" style={{ fontSize: "0.7rem" }}>
-                  Re-branding
+                  {description}
                 </p>
               </div>
 
@@ -220,8 +223,8 @@ const ItemEdit = ({
 
             <div>
               <div className="flex flex-col gap-4 text-dark md:hidden">
-                {items.map((item) => (
-                  <div className="rounded-md" key={item.id}>
+                {items.map((item, index) => (
+                  <div className="rounded-md" key={index}>
                     <div className="flex w-full justify-between rounded-t-md bg-secondary-hover">
                       <div className="p-4 text-sm">{item.name}</div>
                       <div className="p-4">&#163;{item.price}</div>
@@ -269,7 +272,11 @@ const ItemEdit = ({
           </div>
         </div>
       </div>
-      <FormComponent />
+      <FormComponent
+        showForm={showForm}
+        setShowForm={setShowForm}
+        fromSidebar={showForm}
+      />
     </>
   );
 };
@@ -320,6 +327,8 @@ ItemEdit.propTypes = {
   showForm: PropTypes.bool.isRequired,
   setShowForm: PropTypes.any.isRequired,
   fromSidebar: PropTypes.bool.isRequired,
+  // openForm: PropTypes.func.isRequired,
+
   // handleMarkAsPaid: PropTypes.func.isRequired,
   removeFromInvoicesData: PropTypes.func.isRequired,
   data: PropTypes.arrayOf(

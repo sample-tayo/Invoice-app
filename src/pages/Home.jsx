@@ -9,15 +9,21 @@ function Home({
   setInvoicesData,
   showForm,
   setShowForm,
+  addInvoice,
 }) {
   return (
     <>
       <Head onNewInvoiceClick={openForm} data={invoicesData} />
-      <InvoicesList data={invoicesData} setInvoicesData={setInvoicesData} />
+      <InvoicesList
+        data={invoicesData}
+        setInvoicesData={setInvoicesData}
+        invoicesData={invoicesData}
+      />
       <FormComponent
         showForm={showForm}
         setShowForm={setShowForm}
         fromSidebar={showForm}
+        addInvoice={addInvoice}
       />
     </>
   );
@@ -32,6 +38,7 @@ Home.propTypes = {
   openForm: PropTypes.func.isRequired,
   invoicesData: PropTypes.array.isRequired,
   setInvoicesData: PropTypes.func.isRequired,
+  addInvoice: PropTypes.func.isRequired,
 };
 
 export default Home;

@@ -7,12 +7,10 @@ function Invoice({ invoice }) {
   };
 
   return (
-    <div className="flex items-center rounded-md bg-nav-dark hover:border hover:border-primaryHover hover:transition  hover:duration-300 hover:ease-in-out">
+    <div className="flex items-center gap-2  rounded-md bg-nav-dark p-2 hover:border hover:border-primaryHover hover:transition hover:duration-300  hover:ease-in-out md:p-4">
       <div
-        className={`p grid grid-cols-2 items-center gap-4 bg-nav-dark p-2 text-item-light md:grid-cols-5 md:flex-row md:gap-x-9 md:p-5`}
+        className={` grid grid-cols-2 items-center gap-4   text-item-light md:grid-cols-5 md:flex-row md:gap-x-9`}
       >
-        {/* ... your content here ... */}
-
         <p className="w-20 text-sm font-semibold ">
           <span className="text-primary">#</span>
           {invoice.id}
@@ -30,8 +28,8 @@ function Invoice({ invoice }) {
           <p className="min-content font-bold md:hidden">${invoice.total}</p>
         </div>
 
-        <p className=" min-content hidden text-right font-bold md:block">
-          ${invoice.total}
+        <p className=" min-content hidden text-left font-bold md:block">
+          &pound;{invoice.total}
         </p>
 
         <div
@@ -81,7 +79,6 @@ Invoice.propTypes = {
     total: PropTypes.number.isRequired,
     status: PropTypes.oneOf(["draft", "pending", "paid"]).isRequired,
   }).isRequired,
-  isFirst: PropTypes.bool.isRequired,
 };
 
 export default Invoice;

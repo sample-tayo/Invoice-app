@@ -16,6 +16,34 @@ export default function App() {
   const [showForm, setShowForm] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(true);
 
+  function generateUniqueId() {
+    const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const randomAlphabets = Array.from(
+      { length: 2 },
+      () => alphabet[Math.floor(Math.random() * alphabet.length)],
+    ).join("");
+
+    const randomNumbers = Array.from({ length: 4 }, () =>
+      Math.floor(Math.random() * 10),
+    ).join("");
+
+    return randomAlphabets + randomNumbers;
+  }
+
+  const addInvoice = (newInvoice) => {
+    // Generate a unique ID for the new invoice
+    newInvoice.id = generateUniqueId();
+
+    // Calculate the total for the new invoice based on the items
+    newInvoice.total = newInvoice.items.reduce(
+      (acc, item) => acc + item.total,
+      0,
+    );
+
+    // Add the new invoice to the invoicesData state
+    setInvoicesData((prevData) => [...prevData, newInvoice]);
+  };
+
   // func to delete items from the data
   const removeFromInvoicesData = (id) => {
     // Use the `id` to filter out the item to be deleted
@@ -51,6 +79,7 @@ export default function App() {
               fromSidebar={showForm}
               closeForm={closeForm}
               setShowForm={setShowForm}
+              addInvoice={addInvoice}
             />
           }
         />
@@ -58,11 +87,14 @@ export default function App() {
           path="/invoices/:id"
           element={
             <ItemEdit
-              data={data}
+              data={invoicesData}
               removeFromInvoicesData={removeFromInvoicesData}
               invoicesData={invoicesData}
               setInvoicesData={setInvoicesData}
               onClickEditForm={openForm}
+              showForm={showForm}
+              setShowForm={setShowForm}
+              fromSidebar={showForm}
             />
           }
         />
