@@ -7,9 +7,9 @@ function Invoice({ invoice }) {
   };
 
   return (
-    <div className="flex items-center gap-2  rounded-md bg-nav-dark p-2 hover:border hover:border-primaryHover hover:transition hover:duration-300  hover:ease-in-out md:p-4">
+    <div className="flex items-center rounded-md  bg-nav-dark p-2 hover:border hover:border-primaryHover hover:transition hover:duration-300 hover:ease-in-out  md:gap-2 md:p-4">
       <div
-        className={` grid grid-cols-2 items-center gap-4   text-item-light md:grid-cols-5 md:flex-row md:gap-x-9`}
+        className={` grid w-full grid-cols-2 items-center gap-4   text-item-light md:grid-cols-5 md:flex-row md:gap-x-9`}
       >
         <p className="w-20 text-sm font-semibold ">
           <span className="text-primary">#</span>
@@ -57,6 +57,7 @@ function Invoice({ invoice }) {
 
         {/* endf of arror */}
       </div>
+
       <div className="col-span-1 hidden md:block">
         <svg
           xmlns="http://www.w3.org/2000/svg"
