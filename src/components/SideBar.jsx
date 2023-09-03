@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
+import ThemeSwitcher from "./ThemeSwitcher";
 
-export default function Sidebar({ toggleDarkMode }) {
+export default function Sidebar() {
   return (
     <aside className="sticky top-0 z-30 h-auto w-screen px-4 dark:bg-nav-dark md:h-screen md:w-24 md:px-0">
       <nav className="flex h-full flex-row items-center justify-between shadow-sm md:flex-col">
@@ -11,12 +12,7 @@ export default function Sidebar({ toggleDarkMode }) {
         />
 
         <div className="flex flex-row items-center justify-center gap-5 py-3 md:flex-col">
-          <img
-            onClick={toggleDarkMode}
-            src="/assets/images/icon-sun.svg"
-            alt=""
-            className="w-10"
-          />
+          <ThemeSwitcher />
           <img
             src="https://ui-avatars.com/api/?background=c7d2fe&color=3730a3&bold=true"
             alt=""

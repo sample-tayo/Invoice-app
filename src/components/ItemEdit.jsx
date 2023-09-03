@@ -25,11 +25,21 @@ const ItemEdit = ({
     createdAt,
     paymentDue,
     clientName,
-    clientAddress,
+    clientAddress: {
+      street: clientStreet,
+      city: clientCity,
+      postCode: clientPostCode,
+      country: clientCountry,
+    },
     clientEmail,
     items,
     total,
-    senderAddress,
+    senderAddress: {
+      street: senderStreet,
+      city: senderCity,
+      postCode: senderPostCode,
+      country: senderCountry,
+    },
     description,
   } = invoice;
 
@@ -65,6 +75,7 @@ const ItemEdit = ({
   const handleEditForm = () => {
     onClickEditForm(); // Call the onClickEditForm prop to toggle showForm
   };
+
   return (
     <>
       <div className="mb-20 mt-6 w-full pl-10 pr-10 md:mt-20 md:w-3/6 md:p-0">
@@ -147,10 +158,10 @@ const ItemEdit = ({
                 className="text-right text-sm text-dark"
                 style={{ fontSize: "0.65rem" }}
               >
-                <p>{senderAddress.street}</p>
-                <p>{senderAddress.city} </p>
-                <p>{senderAddress.postCode}</p>
-                <p>{senderAddress.country}</p>
+                <p>{senderStreet}</p>
+                <p>{senderCity} </p>
+                <p>{senderPostCode}</p>
+                <p>{senderCountry}</p>
               </div>
             </div>
 
@@ -199,10 +210,10 @@ const ItemEdit = ({
                 >
                   {clientName}
                 </p>
-                <p>{clientAddress.street}</p>
-                <p>{clientAddress.city}</p>
-                <p>{clientAddress.postCode}</p>
-                <p>{clientAddress.country}</p>
+                <p>{clientStreet}</p>
+                <p>{clientCity}</p>
+                <p>{clientPostCode}</p>
+                <p>{clientCountry}</p>
               </div>
 
               <div
@@ -276,6 +287,7 @@ const ItemEdit = ({
         showForm={showForm}
         setShowForm={setShowForm}
         fromSidebar={showForm}
+        editInvoice={invoice}
       />
     </>
   );

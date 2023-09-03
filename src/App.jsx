@@ -14,8 +14,6 @@ import data from "./data/data.json";
 export default function App() {
   const [invoicesData, setInvoicesData] = useState(data);
   const [showForm, setShowForm] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(true);
-
   function generateUniqueId() {
     const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     const randomAlphabets = Array.from(
@@ -51,11 +49,6 @@ export default function App() {
     setInvoicesData(updatedData);
   };
 
-  const toggleDarkMode = () => {
-    setIsDarkMode(!isDarkMode);
-    console.log("heloo");
-  };
-
   const openForm = () => {
     setShowForm(true);
     console.log("hello");
@@ -67,7 +60,7 @@ export default function App() {
 
   const router = createBrowserRouter(
     createRoutesFromElements(
-      <Route to="/" element={<RootLayout toggleDarkMode={toggleDarkMode} />}>
+      <Route to="/" element={<RootLayout />}>
         <Route
           index
           element={

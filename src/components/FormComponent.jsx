@@ -12,16 +12,16 @@ import NewTextInput from "../utils/NewTextInput";
 import FormItem from "../utils/FormItem";
 
 const validationSchema = Yup.object().shape({
-  billFromStreetAddress: Yup.string().required("Required"),
-  billFromCity: Yup.string().required("Required"),
-  billFromPostCode: Yup.string().required("Required"),
-  billFromCountry: Yup.string().required("Required"),
+  senderStreet: Yup.string().required("Required"),
+  senderCity: Yup.string().required("Required"),
+  senderPostCode: Yup.string().required("Required"),
+  senderCountry: Yup.string().required("Required"),
   clientName: Yup.string().required("Required"),
   clientEmail: Yup.string().email("Invalid email").required("Required"),
-  billToStreetAddress: Yup.string().required("Required"),
-  billToCity: Yup.string().required("Required"),
-  billToPostCode: Yup.string().required("Required"),
-  billToCountry: Yup.string().required("Required"),
+  clientStreet: Yup.string().required("Required"),
+  clientCity: Yup.string().required("Required"),
+  clientPostCode: Yup.string().required("Required"),
+  clientCountry: Yup.string().required("Required"),
   description: Yup.string().required("Required"),
   paymentTerms: Yup.string().required("Payment Terms is required"),
   items: Yup.array().of(
@@ -41,22 +41,28 @@ const validationSchema = Yup.object().shape({
 });
 
 const initialValues = {
-  billFromStreetAddress: "",
-  billFromCity: "",
-  billFromPostCode: "",
-  billFromCountry: "",
+  senderStreet: "",
+  senderCity: "",
+  senderPostCode: "",
+  senderCountry: "",
   clientName: "",
   clientEmail: "",
-  billToStreetAddress: "",
-  billToCity: "",
-  billToPostCode: "",
-  billToCountry: "",
+  clientStreet: "",
+  clientCity: "",
+  clientPostCode: "",
+  clientCountry: "",
   description: "",
   // initial values for item qty
   items: [{ itemName: "", quantity: 0, price: 0.0 }],
 };
 
-const FormComponent = ({ showForm, setShowForm, fromSidebar, addInvoice }) => {
+const FormComponent = ({
+  showForm,
+  setShowForm,
+  fromSidebar,
+  addInvoice,
+  editInvoice,
+}) => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [disableValidation, setDisableValidation] = useState(false);
 
@@ -104,16 +110,16 @@ const FormComponent = ({ showForm, setShowForm, fromSidebar, addInvoice }) => {
       clientEmail: values.clientEmail,
       status: status,
       senderAddress: {
-        street: values.billFromStreetAddress,
-        city: values.billFromCity,
-        postCode: values.billFromPostCode,
-        country: values.billFromCountry,
+        street: values.senderStreet,
+        city: values.senderCity,
+        postCode: values.senderPostCode,
+        country: values.senderCountry,
       },
       clientAddress: {
-        street: values.billToStreetAddress,
-        city: values.billToCity,
-        postCode: values.billToPostCode,
-        country: values.billToCountry,
+        street: values.clientStreet,
+        city: values.clientCity,
+        postCode: values.clientPostCode,
+        country: values.clientCountry,
       },
       items: items,
       total: items.reduce((acc, item) => acc + item.total, 0),
@@ -170,7 +176,7 @@ const FormComponent = ({ showForm, setShowForm, fromSidebar, addInvoice }) => {
       <Formik
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
-        initialValues={initialValues}
+        initialValues={editInvoice || initialValues}
       >
         {({ values, errors, touched }) => (
           <Form
@@ -194,33 +200,33 @@ const FormComponent = ({ showForm, setShowForm, fromSidebar, addInvoice }) => {
 
               <MyTextInput
                 label="Street Address"
-                name="billFromStreetAddress"
+                name="senderStreet"
                 type="text"
               />
 
               <div className="mt-2 flex gap-8  space-x-2">
                 <NewTextInput
                   label="City"
-                  name="billFromCity"
+                  name="senderCity"
                   type="text"
-                  errors={errors.billFromCity}
-                  touched={touched.billFromCity}
+                  errors={errors.senderCity}
+                  touched={touched.senderCity}
                 />
 
                 <NewTextInput
                   label="Post Code"
-                  name="billFromPostCode"
+                  name="senderPostCode"
                   type="text"
-                  errors={errors.billFromPostCode}
-                  touched={touched.billFromPostCode}
+                  errors={errors.senderPostCode}
+                  touched={touched.senderPostCode}
                 />
 
                 <NewTextInput
                   label="Country"
-                  name="billFromCountry"
+                  name="senderCountry"
                   type="text"
-                  errors={errors.billFromCountry}
-                  touched={touched.billFromCountry}
+                  errors={errors.senderCountry}
+                  touched={touched.senderCountry}
                 />
               </div>
             </div>
@@ -240,32 +246,32 @@ const FormComponent = ({ showForm, setShowForm, fromSidebar, addInvoice }) => {
               {/* bill to street address */}
               <MyTextInput
                 label="Street Address"
-                name="billToStreetAddress"
-                type="billToStreetAddress"
+                name="clientStreet"
+                type="clientStreet"
               />
               <div className="mt-2 flex gap-8  space-x-2">
                 <NewTextInput
                   label="City"
-                  name="billToCity"
+                  name="clientCity"
                   type="text"
-                  errors={errors.billToCity}
-                  touched={touched.billToCity}
+                  errors={errors.clientCity}
+                  touched={touched.clientCity}
                 />
 
                 <NewTextInput
                   label="Post Code"
-                  name="billToPostCode"
+                  name="clientPostCode"
                   type="text"
-                  errors={errors.billToPostCode}
-                  touched={touched.billToPostCode}
+                  errors={errors.clientPostCode}
+                  touched={touched.clientPostCode}
                 />
 
                 <NewTextInput
                   label="Country"
-                  name="billToCountry"
+                  name="clientCountry"
                   type="text"
-                  errors={errors.billToCountry}
-                  touched={touched.billToCountry}
+                  errors={errors.clientCountry}
+                  touched={touched.clientCountry}
                 />
               </div>
               {/* description */}
@@ -403,6 +409,52 @@ FormComponent.propTypes = {
   fromSidebar: PropTypes.bool.isRequired,
 
   // onCloseForm: PropTypes.func.isRequired,
+  // editInvoice: PropTypes.shape({
+  //   senderStreet: PropTypes.string.isRequired,
+  //   senderCity: PropTypes.string.isRequired,
+  //   senderPostCode: PropTypes.string.isRequired,
+  //   senderCountry: PropTypes.string.isRequired,
+  //   clientName: PropTypes.string.isRequired,
+  //   clientStreet: PropTypes.string.isRequired,
+  //   clientCity: PropTypes.string.isRequired,
+  //   clientPostCode: PropTypes.string.isRequired,
+  //   clientCountry: PropTypes.string.isRequired,
+  //   description: PropTypes.string.isRequired,
+  //   paymentTerms: PropTypes.string.isRequired,
+  // }),
+
+  editInvoice: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    createdAt: PropTypes.string.isRequired,
+    paymentDue: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    paymentTerms: PropTypes.number.isRequired,
+    clientName: PropTypes.string.isRequired,
+    senderStreet: PropTypes.string.isRequired,
+    clientEmail: PropTypes.string.isRequired,
+    status: PropTypes.oneOf(["draft", "pending", "paid"]).isRequired,
+    // senderAddress: PropTypes.shape({
+    //   street: PropTypes.string.isRequired,
+    //   city: PropTypes.string.isRequired,
+    //   postCode: PropTypes.string.isRequired,
+    //   country: PropTypes.string.isRequired,
+    // }).isRequired,
+    clientAddress: PropTypes.shape({
+      street: PropTypes.string.isRequired,
+      city: PropTypes.string.isRequired,
+      postCode: PropTypes.string.isRequired,
+      country: PropTypes.string.isRequired,
+    }).isRequired,
+    items: PropTypes.arrayOf(
+      PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        quantity: PropTypes.number.isRequired,
+        price: PropTypes.number.isRequired,
+        total: PropTypes.number.isRequired,
+      }),
+    ).isRequired,
+    total: PropTypes.number.isRequired,
+  }),
 };
 
 export default FormComponent;
