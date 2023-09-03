@@ -23,21 +23,21 @@ const validationSchema = Yup.object().shape({
   billToPostCode: Yup.string().required("Required"),
   billToCountry: Yup.string().required("Required"),
   description: Yup.string().required("Required"),
-  // paymentTerms: Yup.string().required("Payment Terms is required"),
-  // items: Yup.array().of(
-  //   Yup.object().shape({
-  //     itemName: Yup.string().required("Item Name is required"),
-  //     quantity: Yup.number()
-  //       .min(1, "Quantity must be at least 1")
-  //       .required("Quantity is required")
-  //       .positive()
-  //       .integer(),
-  //     price: Yup.number()
-  //       .min(0.01, "Price must be at least 0.01")
-  //       .required("Price is required")
-  //       .positive(),
-  //   }),
-  // ),
+  paymentTerms: Yup.string().required("Payment Terms is required"),
+  items: Yup.array().of(
+    Yup.object().shape({
+      itemName: Yup.string().required("Item Name is required"),
+      quantity: Yup.number()
+        .min(1, "Quantity must be at least 1")
+        .required("Quantity is required")
+        .positive()
+        .integer(),
+      price: Yup.number()
+        .min(0.01, "Price must be at least 0.01")
+        .required("Price is required")
+        .positive(),
+    }),
+  ),
 });
 
 const initialValues = {
@@ -86,10 +86,15 @@ const FormComponent = ({ showForm, setShowForm, fromSidebar, addInvoice }) => {
     const paymentDueFormatted = format(selectedDate, "yyyy-MM-dd");
 
     // Convert quantity and price to numbers
-    const quantity = parseInt(values.items[0].quantity, 10);
-    const price = parseFloat(values.items[0].price);
+    const items = values.items.map((item) => ({
+      itemName: item.itemName,
+      quantity: parseInt(item.quantity, 10),
+      price: parseFloat(item.price),
+      total: parseInt(item.quantity, 10) * parseFloat(item.price),
+    }));
 
-    const total = quantity * price;
+    // Convert paymentTerms to an integer
+    const paymentTerms = parseInt(values.paymentTerms, 10);
 
     // Construct the newInvoice object
     const newInvoice = {
@@ -97,7 +102,7 @@ const FormComponent = ({ showForm, setShowForm, fromSidebar, addInvoice }) => {
       createdAt: createdAtFormatted,
       paymentDue: paymentDueFormatted,
       description: values.description,
-      paymentTerms: values.paymentTerms,
+      paymentTerms: paymentTerms,
       clientName: values.clientName,
       clientEmail: values.clientEmail,
       status: "pending",
@@ -113,15 +118,8 @@ const FormComponent = ({ showForm, setShowForm, fromSidebar, addInvoice }) => {
         postCode: values.billToPostCode,
         country: values.billToCountry,
       },
-      items: [
-        {
-          itemName: values.items[0].itemName,
-          quantity: quantity,
-          price: price,
-          total: total,
-        },
-      ],
-      total: total,
+      items: items,
+      total: items.reduce((acc, item) => acc + item.total, 0),
     };
     console.log(newInvoice);
 
