@@ -13,3 +13,7 @@
   --pending-with-opacity: rgba(255, 143, 0, 0.1);
   --paid-with-opacity: rgba(51, 214, 159, 0.1);
 }
+
+.dark {
+  @apply bg-draft text-light;
+}

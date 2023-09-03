@@ -49,13 +49,13 @@ const ItemEdit = ({
 
     if (index !== -1) {
       // Update the status to "Paid" in the invoicesData array
-      invoicesData[index].status = "Paid";
+      invoicesData[index].status = "paid";
 
       // Update the state to trigger a re-render
       setInvoicesData([...invoicesData]);
 
       // Update the status state
-      setStatus("Paid");
+      setStatus("paid");
 
       // Log the updated data
       console.log("Updated Invoices Data: ", invoicesData);
