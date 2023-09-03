@@ -5,7 +5,7 @@ import Invoice from "./Invoice";
 
 function InvoicesList({ invoicesData }) {
   return (
-    <div className="mt-8 flex w-full flex-col-reverse gap-4 px-8 md:w-9/12">
+    <div className="mt-8 flex w-full flex-col-reverse px-8 md:w-9/12 md:gap-4">
       {invoicesData.map((invoice, index) => (
         <Link
           to={`/invoices/${invoice.id}`}

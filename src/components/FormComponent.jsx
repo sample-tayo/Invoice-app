@@ -57,7 +57,8 @@ const initialValues = {
 };
 
 const FormComponent = ({ showForm, setShowForm, fromSidebar, addInvoice }) => {
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [disableValidation, setDisableValidation] = useState(false);
 
   const formRef = useRef(null); // Reference to the Form component, Ref introduced because of click outside
 
@@ -76,13 +77,9 @@ const FormComponent = ({ showForm, setShowForm, fromSidebar, addInvoice }) => {
     };
   });
 
-  function handleSubmit(values) {
-    console.log("handleSubmit called");
-    console.log("Form:", values);
-
+  function createNewInvoice(values, status = "pending") {
     // Format createdAt and paymentDue dates
     const createdAtFormatted = format(new Date(), "yyyy-MM-dd");
-
     const paymentDueFormatted = format(selectedDate, "yyyy-MM-dd");
 
     // Convert quantity and price to numbers
@@ -105,7 +102,7 @@ const FormComponent = ({ showForm, setShowForm, fromSidebar, addInvoice }) => {
       paymentTerms: paymentTerms,
       clientName: values.clientName,
       clientEmail: values.clientEmail,
-      status: "pending",
+      status: status,
       senderAddress: {
         street: values.billFromStreetAddress,
         city: values.billFromCity,
@@ -121,22 +118,42 @@ const FormComponent = ({ showForm, setShowForm, fromSidebar, addInvoice }) => {
       items: items,
       total: items.reduce((acc, item) => acc + item.total, 0),
     };
-    console.log(newInvoice);
+
+    return newInvoice;
+  }
+
+  function handleSubmit(values) {
+    // Call createNewInvoice to create a new invoice with status "pending"
+    const newInvoice = createNewInvoice(values, "pending");
 
     // Call the addInvoice function with the new invoice data
     addInvoice(newInvoice);
 
     // Close the form
     setShowForm(false);
+
+    if (!disableValidation) {
+      // Validate the form using Yup schema
+      try {
+        validationSchema.validateSync(values, { abortEarly: false });
+      } catch (validationErrors) {
+        return;
+      }
+    }
   }
 
-  function handleDiscard() {
-    // Reset the form values to initial values
+  function handleSaveToDraft(values) {
+    // Call createNewInvoice to create a new invoice with status "draft"
+    const newInvoice = createNewInvoice(values, "draft");
 
-    setSelectedDate(null);
+    // Call the addInvoice function with the new invoice data
+    addInvoice(newInvoice);
 
     // Close the form
     setShowForm(false);
+
+    // Re-enable validation
+    setDisableValidation(false);
   }
 
   return (
@@ -346,8 +363,11 @@ const FormComponent = ({ showForm, setShowForm, fromSidebar, addInvoice }) => {
 
             <div className="flex justify-between bg-backgroundDark p-4">
               <button
-                onClick={() => handleDiscard()}
                 type="button"
+                onClick={() => {
+                  setShowForm(false);
+                  setSelectedDate(null);
+                }}
                 className="rounded-2xl bg-gray-300 p-2"
               >
                 Discard
@@ -355,6 +375,7 @@ const FormComponent = ({ showForm, setShowForm, fromSidebar, addInvoice }) => {
               <div className="space-x-4">
                 <button
                   type="button"
+                  onClick={() => handleSaveToDraft(values)}
                   className="rounded-2xl bg-blue-500 p-2 text-white"
                 >
                   Save to Draft
