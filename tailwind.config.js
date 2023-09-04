@@ -15,6 +15,7 @@ export default {
         primary: "#7C5DFA",
         delete: "#EC5757",
         "delete-hover": "#FF9797",
+        primaryHover: "#9277FF",
 
         light: {
           body: {
@@ -143,7 +144,6 @@ export default {
       // colors: {
       //   // Primary Colors
       //   primary: "#7C5DFA",
-      //   primaryHover: "#9277FF",
       //   secondary: "#1e2139",
       //   "secondary-hover": "#252945",
       //   draft: "#DFE3FA",
