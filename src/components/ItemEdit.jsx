@@ -82,10 +82,10 @@ const ItemEdit = ({
         <GoBack />
         <div className="flex flex-col gap-8">
           {/* edit, delete button */}
-          <div className="mt-8 flex h-auto items-center justify-between rounded-md bg-border-dark p-4">
+          <div className="mt-8 flex h-auto items-center justify-between rounded-md bg-light-form-fieldBg p-4 dark:bg-dark-form-fieldBg">
             <div className="flex w-full items-center justify-between md:justify-start md:gap-1">
               <div>
-                <p className="px-4 py-2 text-sm font-normal text-dark">
+                <p className="px-4 py-2 text-sm font-normal text-light-text-bodyA dark:text-dark-text-bodyA">
                   Status
                 </p>
               </div>
@@ -112,13 +112,13 @@ const ItemEdit = ({
               <button
                 onClick={handleEditForm}
                 type="button"
-                className="rounded bg-secondary px-4 py-2 text-sm font-semibold text-white hover:bg-secondary-hover"
+                className="rounded bg-light-btn-secondary-bg px-4 py-2 text-sm font-semibold text-light-btn-secondary-text hover:bg-light-btn-secondary-hover dark:bg-dark-btn-secondary-bg dark:text-dark-btn-secondary-text"
               >
                 Edit
               </button>
               <button
                 type="button"
-                className="rounded bg-delete px-4 py-2 text-sm font-semibold text-white hover:bg-delete-hover"
+                className="bg-delete hover:bg-delete-hover rounded px-4 py-2 text-sm font-semibold text-white"
                 onClick={() => setShowDeleteModal(true)}
               >
                 Delete
@@ -133,7 +133,7 @@ const ItemEdit = ({
               <button
                 onClick={handleMarkAsPaid}
                 type="button"
-                className="rounded bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primaryHover"
+                className="bg-primary hover:bg-primaryHover rounded px-4 py-2 text-sm font-semibold text-white"
               >
                 Mark as Paid
               </button>
@@ -141,21 +141,27 @@ const ItemEdit = ({
           </div>
 
           {/* the second container */}
-          <div className="flex h-auto flex-col gap-8 rounded-md bg-border-dark p-4">
+          <div
+            className="flex
+h-auto flex-col gap-8 rounded-md bg-light-form-fieldBg p-4 dark:bg-dark-form-fieldBg"
+          >
             {/* the info details */}
             <div className="flex w-full justify-between">
               <div className="flex flex-col gap-1">
-                <p className="font-bold text-title-dark">
+                <p className="font-bold text-light-text-placeholder dark:text-dark-text-placeholder">
                   <span className="text-primary">#</span>
                   {id}
                 </p>
-                <p className="text-sm text-dark" style={{ fontSize: "0.7rem" }}>
+                <p
+                  className="text-sm text-light-text-bodyA dark:text-dark-text-bodyA"
+                  style={{ fontSize: "0.7rem" }}
+                >
                   {description}
                 </p>
               </div>
 
               <div
-                className="text-right text-sm text-dark"
+                className="text-right text-sm text-light-text-bodyA dark:text-dark-text-bodyA"
                 style={{ fontSize: "0.65rem" }}
               >
                 <p>{senderStreet}</p>
@@ -170,13 +176,13 @@ const ItemEdit = ({
               <div className="flex w-full flex-row justify-between md:w-auto md:flex-col">
                 <div className="flex flex-col gap-1">
                   <p
-                    className="text-sm text-dark"
+                    className="text-sm text-light-text-bodyA dark:text-dark-text-bodyA"
                     style={{ fontSize: ".7rem" }}
                   >
                     Invoice Date
                   </p>
                   <p
-                    className="text text-base font-bold text-title-dark"
+                    className="text text-base font-bold text-light-text-placeholder dark:text-dark-text-placeholder"
                     style={{ fontSize: ".9rem" }}
                   >
                     {createdAt}
@@ -185,13 +191,13 @@ const ItemEdit = ({
 
                 <div className="flex flex-col gap-1">
                   <p
-                    className="text-sm text-dark"
+                    className="text-sm text-light-text-bodyA dark:text-dark-text-bodyA"
                     style={{ fontSize: ".7rem" }}
                   >
                     Payment Due
                   </p>
                   <p
-                    className="text text-base font-bold text-title-dark"
+                    className="text text-base font-bold text-light-text-placeholder dark:text-dark-text-placeholder"
                     style={{ fontSize: ".9rem" }}
                   >
                     {paymentDue}
@@ -200,12 +206,12 @@ const ItemEdit = ({
               </div>
 
               <div
-                className="flex flex-col items-start gap-0.5 text-left text-sm text-dark "
+                className="flex flex-col items-start gap-0.5 text-left text-sm text-light-text-bodyA dark:text-dark-text-bodyA "
                 style={{ fontSize: "0.7rem" }}
               >
                 <p>Bill To</p>
                 <p
-                  className="text text-base font-bold text-title-dark"
+                  className="text text-base font-bold text-light-text-placeholder dark:text-dark-text-placeholder"
                   style={{ fontSize: ".9rem" }}
                 >
                   {clientName}
@@ -217,12 +223,12 @@ const ItemEdit = ({
               </div>
 
               <div
-                className="flex flex-col items-start gap-0.5 text-left text-sm text-dark "
+                className="flex flex-col items-start gap-0.5 text-left text-sm text-light-text-bodyA dark:text-dark-text-bodyA "
                 style={{ fontSize: "0.7rem" }}
               >
                 <p>Sent to</p>
                 <p
-                  className="text text-base font-bold text-title-dark"
+                  className="text text-base font-bold text-light-text-placeholder dark:text-dark-text-placeholder"
                   style={{ fontSize: ".9rem" }}
                 >
                   {clientEmail}
@@ -233,10 +239,10 @@ const ItemEdit = ({
             {/* bottom table containing pice and amount */}
 
             <div>
-              <div className="flex flex-col gap-4 text-dark md:hidden">
+              <div className="flex flex-col gap-4 text-light-text-bodyA dark:text-dark-text-bodyA md:hidden">
                 {items.map((item, index) => (
                   <div className="rounded-md" key={index}>
-                    <div className="flex w-full justify-between rounded-t-md bg-secondary-hover">
+                    <div className="bg-secondary-hover flex w-full justify-between rounded-t-md">
                       <div className="p-4 text-sm">{item.name}</div>
                       <div className="p-4">&#163;{item.price}</div>
                     </div>
@@ -245,10 +251,10 @@ const ItemEdit = ({
                 ))}
               </div>
               <div className="hidden md:block">
-                <table className="w-full rounded-t-md bg-secondary-hover ">
+                <table className="w-full rounded-t-md bg-light-invoiceTable-bg dark:bg-dark-invoiceTable-bg ">
                   <thead>
                     <tr
-                      className="text-sm font-extralight text-dark"
+                      className="text-sm font-extralight text-light-text-bodyA dark:text-dark-text-bodyA"
                       style={{ fontSize: ".7rem" }}
                     >
                       <th className="p-4 text-left">Item Name</th>
@@ -260,7 +266,7 @@ const ItemEdit = ({
                   <tbody>
                     {items.map((item) => (
                       <tr
-                        className="bg-row-bg text-sm font-semibold text-title-dark"
+                        className="bg-row-bg text-sm font-semibold text-light-text-placeholder dark:text-dark-text-placeholder"
                         key={item.name}
                       >
                         <td className="p-4">{item.name}</td>
@@ -273,12 +279,48 @@ const ItemEdit = ({
                 </table>
               </div>
 
-              <div className="flex items-center justify-between rounded-b-md bg-black p-6">
-                <p className="text-dark">Amount Due</p>
-                <p className="text-2xl font-semibold text-dark">
+              <div className="flex items-center justify-between rounded-b-md bg-light-invoiceTable-footerBg p-6 dark:bg-dark-invoiceTable-footerBg">
+                <p className="text-light-text-bodyA dark:text-dark-text-bodyA">
+                  Amount Due
+                </p>
+                <p className="text-2xl font-semibold text-light-text-bodyA dark:text-dark-text-bodyA">
                   &#163;{total}
                 </p>
               </div>
+            </div>
+          </div>
+
+          {/* the third hidden part */}
+          <div className="h-auto rounded-md bg-light-form-fieldBg p-4 dark:bg-dark-form-fieldBg md:hidden">
+            <div className="flex w-full items-center justify-between md:hidden">
+              <button
+                onClick={handleEditForm}
+                type="button"
+                className="rounded bg-light-btn-secondary-bg px-4 py-2 text-sm font-semibold text-light-btn-secondary-text hover:bg-light-btn-secondary-hover dark:bg-dark-btn-secondary-bg dark:text-dark-btn-secondary-text"
+              >
+                Edit
+              </button>
+              <button
+                type="button"
+                className="bg-delete hover:bg-delete-hover rounded px-4 py-2 text-sm font-semibold text-white"
+                onClick={() => setShowDeleteModal(true)}
+              >
+                Delete
+              </button>
+              {/* Delete Confirmation Modal */}
+              {showDeleteModal && (
+                <DeleteConfirmationModal
+                  onClose={() => setShowDeleteModal(false)}
+                  onDelete={handleDelete}
+                />
+              )}
+              <button
+                onClick={handleMarkAsPaid}
+                type="button"
+                className="bg-primary hover:bg-primaryHover rounded px-4 py-2 text-sm font-semibold text-white"
+              >
+                Mark as Paid
+              </button>
             </div>
           </div>
         </div>
@@ -299,17 +341,17 @@ export default ItemEdit;
 function DeleteConfirmationModal({ onClose, onDelete }) {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="w-80 rounded-lg bg-border-dark p-6">
-        <h2 className="mb-4 text-xl font-semibold text-title-dark">
+      <div className="bg-border-dark w-80 rounded-lg p-6">
+        <h2 className="mb-4 text-xl font-semibold text-light-text-placeholder dark:text-dark-text-placeholder">
           Confirm Deletion
         </h2>
-        <p className="mb-4 text-sm text-dark">
+        <p className="text-dark mb-4 text-sm">
           Are you sure you want to delete this invoice? This action cannot be
           undone.
         </p>
         <div className="flex justify-end space-x-4">
           <button
-            className="rounded-md bg-secondary px-4 py-2 text-dark hover:bg-secondary-hover"
+            className="bg-secondary text-dark hover:bg-secondary-hover rounded-md px-4 py-2"
             onClick={onClose}
           >
             Cancel

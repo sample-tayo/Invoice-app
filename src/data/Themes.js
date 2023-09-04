@@ -64,3 +64,70 @@ export const light = {
     alt: "moon icon",
   },
 };
+
+export const dark = {
+  color: {
+    body: {
+      bg: "#141625",
+    },
+    sidebar: {
+      bg: "#1e2139",
+    },
+    form: {
+      bg: "#141625",
+      fieldBg: "#1e2139",
+      fieldBorder: "#252945",
+    },
+    btn: {
+      secondary: {
+        bg: "#252945",
+        hover: "#ffffff",
+        text: "#dfe3fa",
+      },
+      tertiary: {
+        bg: "#363b53",
+        hover: "#1e2139",
+        text: "#dfe3fa",
+      },
+      quaternary: {
+        bg: "#252945",
+        hover: "#1e2139",
+        text: "#DFE3FA",
+      },
+    },
+    invoiceItem: {
+      bg: "#1e2139",
+    },
+    invoiceStatus: {
+      bg: "rgba(223, 227, 250, .06)",
+      text: "#dfe3fa",
+    },
+    invoiceTable: {
+      bg: "#252945",
+      footerBg: "#0C0e16",
+    },
+    popup: {
+      bg: "#1e2139",
+    },
+    dropdown: {
+      bg: "#252945",
+      shadow: "rgba(0, 0, 0, 0.25)",
+    },
+    checkbox: {
+      bg: "#1e2139",
+    },
+    text: {
+      heading: "#ffffff",
+      bodyA: "#dfe3Fa",
+      bodyB: "#ffffff",
+      formLabel: "#dfe3fa",
+      link: "#ffffff",
+      linkHover: "#888eb0",
+      placeholder: "#fff",
+    },
+  },
+  icon: {
+    path: "/images/icon-sun.svg",
+    alt: "sun icon",
+  },
+};

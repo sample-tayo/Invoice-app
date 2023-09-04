@@ -1,20 +1,27 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const ThemeSwitcher = () => {
-  const [darkMode, setDarkMode] = useState(true);
+  const [theme, setTheme] = useState("light");
 
-  const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
+  useEffect(() => {
+    if (theme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, [theme]);
+
+  const handleThemeSwitch = () => {
+    setTheme(theme === "dark" ? "light" : "dark");
   };
 
   return (
-    <button onClick={toggleDarkMode}>
+    <button onClick={handleThemeSwitch}>
       <img
-        onClick={toggleDarkMode}
         src={
-          darkMode
-            ? "/assets/images/icon-sun.svg"
-            : "/assets/images/icon-moon.svg"
+          theme === "light"
+            ? "/assets/images/icon-moon.svg"
+            : "/assets/images/icon-sun.svg"
         }
         alt=""
         className="w-10"

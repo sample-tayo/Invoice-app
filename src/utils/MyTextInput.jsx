@@ -8,16 +8,22 @@ const MyTextInput = ({ label, id, name, ...props }) => {
     <div className="mt-2">
       <label
         htmlFor={id || name}
-        className="mb-1 block text-sm text-dark"
+        className="mb-1 block text-sm text-light-text-formLabel dark:text-dark-text-formLabel"
         style={{ fontSize: "0.7rem" }}
       >
         {label}
       </label>
       <input
         type="text"
-        className={`w-full rounded bg-bg-dark p-2 font-semibold text-title-dark ${
-          meta.error && meta.touched ? "border-red-500" : ""
-        } ${meta.touched ? "border-2 focus:border-blue-500" : ""}`}
+        className={`w-full rounded border ${
+          meta.error && meta.touched
+            ? "border-red-500"
+            : meta.touched && !meta.errors
+            ? "border-green-400"
+            : meta.touched
+            ? "focus:border-blue-500"
+            : "border-light-form-fieldBorder dark:border-dark-form-fieldBorder"
+        } bg-light-form-fieldBg p-2 font-semibold text-light-text-bodyA dark:bg-dark-form-fieldBg dark:text-dark-text-bodyA`}
         {...field}
         {...props}
       />

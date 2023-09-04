@@ -6,11 +6,11 @@ const FormItem = ({ index, item, errors, touched, remove }) => {
     return quantity * price;
   };
   return (
-    <div className="flex items-center space-x-4" key={index}>
+    <div className="item flex gap-2" key={index}>
       {/* Item Name */}
-      <div className="flex-1">
+      <div className="">
         <label
-          className="mb-1 block text-sm text-dark"
+          className="mb-1 block text-sm text-light-text-formLabel dark:text-dark-text-formLabel"
           style={{ fontSize: "0.7rem" }}
           htmlFor={`items.${index}.itemName`}
         >
@@ -19,7 +19,9 @@ const FormItem = ({ index, item, errors, touched, remove }) => {
         <Field
           type="text"
           name={`items.${index}.itemName`}
-          className={`w-full rounded bg-bg-dark p-2 font-semibold text-title-dark ${
+          className={`text-title-dark w-48
+          rounded border border-light-form-fieldBorder bg-light-form-fieldBg p-2 font-semibold
+          dark:border-dark-form-fieldBorder dark:bg-dark-form-fieldBg ${
             errors.items &&
             errors.items[index] &&
             errors.items[index].itemName &&
@@ -43,18 +45,19 @@ const FormItem = ({ index, item, errors, touched, remove }) => {
       </div>
 
       {/* Quantity */}
-      <div className="flex-1">
+      <div className="">
         <label
-          className="mb-1 block text-sm text-dark"
+          className="mb-1 block text-sm text-light-text-formLabel dark:text-dark-text-formLabel"
           style={{ fontSize: "0.7rem" }}
           htmlFor={`items.${index}.quantity`}
         >
-          Quantity
+          Qty
         </label>
         <Field
           type="number"
           name={`items.${index}.quantity`}
-          className={`w-full rounded bg-bg-dark p-2 font-semibold text-title-dark ${
+          className={` w-20 rounded border
+          border-light-form-fieldBorder bg-light-form-fieldBg p-2 font-semibold dark:border-dark-form-fieldBorder dark:bg-dark-form-fieldBg ${
             errors.items &&
             errors.items[index] &&
             errors.items[index].quantity &&
@@ -78,9 +81,9 @@ const FormItem = ({ index, item, errors, touched, remove }) => {
       </div>
 
       {/* Price */}
-      <div className="flex-1">
+      <div className="">
         <label
-          className="mb-1 block text-sm text-dark"
+          className="mb-1 block text-sm text-light-text-formLabel dark:text-dark-text-formLabel"
           style={{ fontSize: "0.7rem" }}
           htmlFor={`items.${index}.price`}
         >
@@ -89,7 +92,8 @@ const FormItem = ({ index, item, errors, touched, remove }) => {
         <Field
           type="number"
           name={`items.${index}.price`}
-          className={`w-full rounded bg-bg-dark p-2 font-semibold text-title-dark ${
+          className={`w-32 rounded border
+          border-light-form-fieldBorder bg-light-form-fieldBg p-2 font-semibold dark:border-dark-form-fieldBorder dark:bg-dark-form-fieldBg ${
             errors.items &&
             errors.items[index] &&
             errors.items[index].price &&
@@ -113,39 +117,26 @@ const FormItem = ({ index, item, errors, touched, remove }) => {
       </div>
 
       {/* Total */}
-      <div className="flex-1 flex-col items-center justify-between text-title-dark">
+      <div className="text-title-dark flex  w-20 flex-col">
         <p
-          className="mb-1 block text-sm text-dark"
+          className="mb-1 block text-sm text-light-text-formLabel dark:text-dark-text-formLabel"
           style={{ fontSize: "0.7rem" }}
         >
           Total
         </p>
-        <p>
-          <span>{calculateTotal(item.quantity, item.price)}</span>
+        <p className=" rounded border p-2 font-semibold">
+          {calculateTotal(item.quantity, item.price)}
         </p>
       </div>
 
       {/* Delete Icon */}
-      <div className="flex-none">
+      <div className="my-auto">
         <button
           type="button"
           onClick={() => remove(index)}
-          className="border-none bg-transparent text-delete"
+          className="text-delete border-none bg-transparent"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            className="h-6 w-6 cursor-pointer"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M6 18L18 6M6 6l12 12"
-            />
-          </svg>
+          <img src="/assets/images/icon-delete.svg" alt="delete-button" />
         </button>
       </div>
     </div>

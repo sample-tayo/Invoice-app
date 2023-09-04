@@ -4,14 +4,14 @@ export default function GoBack() {
   const navigate = useNavigate();
 
   const handleGoBack = () => {
-    navigate(-1); 
+    navigate(-1);
   };
 
   return (
     <div className="mt-4 flex items-start gap-2">
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        className="h-5 w-5 text-light cursor-pointer"
+        className="h-5 w-5 cursor-pointer text-light-text-bodyA dark:text-dark-text-bodyA"
         fill="none"
         viewBox="0 0 24 24"
         stroke="currentColor"
@@ -28,11 +28,11 @@ export default function GoBack() {
         />
       </svg>
       <p
-        className="text-sm font-light text-light cursor-pointer"
+        className="cursor-pointer text-sm font-light text-light-text-bodyB dark:text-dark-text-bodyB"
         onClick={(e) => {
           e.preventDefault();
           handleGoBack();
-        }} 
+        }}
       >
         Go Back
       </p>

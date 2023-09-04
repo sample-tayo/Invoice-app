@@ -5,15 +5,15 @@
 @tailwind utilities;
 
 :root {
-  --draft: #dfe3fa;
+  --draft: #f3f3f5;
   --pending: #ff8f00;
   --paid: #33d69f;
 
-  --draft-with-opacity: rgba(223, 227, 250, 0.1);
+  --draft-with-opacity: rgba(243, 243, 245, 0.1);
   --pending-with-opacity: rgba(255, 143, 0, 0.1);
   --paid-with-opacity: rgba(51, 214, 159, 0.1);
 }
 
-.dark {
-  @apply bg-draft text-light;
+.v {
+  color: #7c5dfa;
 }

@@ -8,7 +8,7 @@ const NewTextInput = ({ label, name, type, errors, touched }) => {
     <div className="flex-grow">
       <label
         htmlFor={name}
-        className="mb-1 block text-sm text-dark"
+        className="mb-1 block text-sm text-light-text-formLabel dark:text-dark-text-formLabel"
         style={{ fontSize: "0.7rem" }}
       >
         {label}
@@ -16,9 +16,15 @@ const NewTextInput = ({ label, name, type, errors, touched }) => {
       <input
         type={type}
         name={name}
-        className={`w-full rounded bg-bg-dark p-2 font-semibold text-title-dark ${
-          errors && touched ? "border-red-500" : ""
-        } ${touched ? "border-2 focus:border-blue-500" : ""}`}
+        className={`w-full rounded border ${
+          errors && touched
+            ? "border-red-500"
+            : touched && !errors
+            ? "border-green-400"
+            : touched
+            ? "focus:border-blue-500"
+            : "border-light-form-fieldBorder dark:border-dark-form-fieldBorder"
+        } bg-light-form-fieldBg p-2 font-semibold text-light-text-bodyA dark:bg-dark-form-fieldBg dark:text-dark-text-bodyA`}
         {...field}
       />
       {touched && errors ? (

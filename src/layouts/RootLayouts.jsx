@@ -4,7 +4,7 @@ import { Outlet } from "react-router-dom";
 
 export default function RootLayout({ toggleDarkMode }) {
   return (
-    <div className="flex flex-col bg-backgroundDark md:flex-row">
+    <div className="bg-light-body-bg dark:bg-dark-body-bg flex flex-col bg-backgroundDark md:flex-row">
       <Sidebar toggleDarkMode={toggleDarkMode} />
 
       <main className="relative flex h-screen flex-1 flex-col items-center overflow-y-auto">

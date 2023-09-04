@@ -13,11 +13,11 @@ const FilterButton = () => {
   };
 
   return (
-    <div className="relative inline-block bg-backgroundDark text-left">
+    <div className="bg-backgroundDark relative inline-block text-left">
       <div>
         <button
           type="button"
-          className="inline-flex w-full justify-center rounded-md px-4 py-2 text-sm font-medium text-item-light  focus:border-none focus:outline-none focus:ring-2 focus:ring-offset-2"
+          className="inline-flex w-full justify-center rounded-md px-4 py-2 text-sm font-medium text-light-text-placeholder focus:border-none  focus:outline-none focus:ring-2 focus:ring-offset-2 dark:text-dark-text-placeholder"
           onClick={() => setIsOpen(!isOpen)}
         >
           {selectedOption}

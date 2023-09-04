@@ -7,33 +7,38 @@ function Invoice({ invoice }) {
   };
 
   return (
-    <div className="flex items-center rounded-md  bg-nav-dark p-2 hover:border hover:border-primaryHover hover:transition hover:duration-300 hover:ease-in-out  md:gap-2 md:p-4">
+    <div className="hover:border-primaryHover flex items-center rounded-md  bg-light-invoiceItem-bg p-2 hover:border hover:transition hover:duration-300 hover:ease-in-out dark:bg-dark-invoiceItem-bg  md:gap-2 md:p-4">
       <div
-        className={` grid w-full grid-cols-2 items-center gap-4   text-item-light md:grid-cols-5 md:flex-row md:gap-x-9`}
+        className={` grid w-full grid-cols-2 items-center   gap-4 md:grid-cols-5 md:flex-row md:gap-x-9`}
       >
-        <p className="w-20 text-sm font-semibold ">
+        <p className="w-20 text-sm font-semibold text-light-text-placeholder dark:text-dark-text-placeholder ">
           <span className="text-primary">#</span>
           {invoice.id}
         </p>
         <p
-          className="w-36 text-right text-sm font-light md:text-left"
+          className="w-36 text-right text-sm font-light text-light-text-bodyB dark:text-dark-text-bodyB md:text-left"
           style={{ fontSize: "0.7rem" }}
         >
           Due {formatDate(invoice.paymentDue)}
         </p>
         <div className="flex flex-col items-start">
-          <p style={{ fontSize: ".8rem" }} className="flex-1 text-left">
+          <p
+            style={{ fontSize: ".8rem" }}
+            className="flex-1 text-left text-light-text-bodyB dark:text-dark-text-bodyB"
+          >
             {invoice.clientName}
           </p>
-          <p className="min-content font-bold md:hidden">${invoice.total}</p>
+          <p className="min-content font-bold text-light-text-placeholder dark:text-dark-text-placeholder md:hidden">
+            ${invoice.total}
+          </p>
         </div>
 
-        <p className=" min-content hidden text-left font-bold md:block">
+        <p className="min-content hidden text-left font-bold text-light-text-placeholder dark:text-dark-text-placeholder md:block">
           &pound;{invoice.total}
         </p>
 
         <div
-          className={`min-content w-26 flex h-8 items-center justify-around  rounded bg-opacity-10 px-3`}
+          className={`min-content w-26 flex h-10 items-center justify-around  rounded bg-opacity-10 px-3`}
           style={{
             backgroundColor: `var(--${invoice.status}-with-opacity)`,
             color: `var(--${invoice.status})`,
