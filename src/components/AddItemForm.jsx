@@ -5,7 +5,7 @@ function AddNewItem() {
   const validationSchema = Yup.object().shape({
     items: Yup.array().of(
       Yup.object().shape({
-        itemName: Yup.string().required("Item Name is required"),
+        name: Yup.string().required("Item Name is required"),
         quantity: Yup.number()
           .required("Quantity is required")
           .positive()
@@ -16,7 +16,7 @@ function AddNewItem() {
   });
 
   const initialValues = {
-    items: [{ itemName: "", quantity: "", price: "" }],
+    items: [{ name: "", quantity: "", price: "" }],
   };
 
   const calculateTotal = (quantity, price) => {
@@ -32,34 +32,34 @@ function AddNewItem() {
               {/* Item Name */}
               <div className="flex-1">
                 <label
-                  className="mb-1 block text-sm text-dark"
+                  className="text-dark mb-1 block text-sm"
                   style={{ fontSize: "0.7rem" }}
-                  htmlFor={`items.${index}.itemName`}
+                  htmlFor={`items.${index}.name`}
                 >
                   Item Name
                 </label>
                 <Field
                   type="text"
-                  name={`items.${index}.itemName`}
-                  className={`w-full rounded bg-bg-dark p-2 font-semibold text-title-dark ${
+                  name={`items.${index}.name`}
+                  className={`bg-bg-dark text-title-dark w-full rounded p-2 font-semibold ${
                     errors.items &&
                     errors.items[index] &&
-                    errors.items[index].itemName &&
+                    errors.items[index].name &&
                     touched.items &&
                     touched.items[index] &&
-                    touched.items[index].itemName
+                    touched.items[index].name
                       ? "border-red-500"
                       : ""
                   }`}
                 />
                 {errors.items &&
                   errors.items[index] &&
-                  errors.items[index].itemName &&
+                  errors.items[index].name &&
                   touched.items &&
                   touched.items[index] &&
-                  touched.items[index].itemName && (
+                  touched.items[index].name && (
                     <div className="text-sm text-red-500">
-                      {errors.items[index].itemName}
+                      {errors.items[index].name}
                     </div>
                   )}
               </div>
@@ -67,7 +67,7 @@ function AddNewItem() {
               {/* Quantity */}
               <div className="flex-1">
                 <label
-                  className="mb-1 block text-sm text-dark"
+                  className="text-dark mb-1 block text-sm"
                   style={{ fontSize: "0.7rem" }}
                   htmlFor={`items.${index}.quantity`}
                 >
@@ -76,7 +76,7 @@ function AddNewItem() {
                 <Field
                   type="number"
                   name={`items.${index}.quantity`}
-                  className={`w-full rounded bg-bg-dark p-2 font-semibold text-title-dark ${
+                  className={`bg-bg-dark text-title-dark w-full rounded p-2 font-semibold ${
                     errors.items &&
                     errors.items[index] &&
                     errors.items[index].quantity &&
@@ -102,7 +102,7 @@ function AddNewItem() {
               {/* Price */}
               <div className="flex-1">
                 <label
-                  className="mb-1 block text-sm text-dark"
+                  className="text-dark mb-1 block text-sm"
                   style={{ fontSize: "0.7rem" }}
                   htmlFor={`items.${index}.price`}
                 >
@@ -111,7 +111,7 @@ function AddNewItem() {
                 <Field
                   type="number"
                   name={`items.${index}.price`}
-                  className={`w-full rounded bg-bg-dark p-2 font-semibold text-title-dark ${
+                  className={`bg-bg-dark text-title-dark w-full rounded p-2 font-semibold ${
                     errors.items &&
                     errors.items[index] &&
                     errors.items[index].price &&
@@ -135,9 +135,9 @@ function AddNewItem() {
               </div>
 
               {/* Total */}
-              <p className="flex-1 flex-col items-center justify-between text-title-dark">
+              <p className="text-title-dark flex-1 flex-col items-center justify-between">
                 <p
-                  className="mb-1 block text-sm text-dark"
+                  className="text-dark mb-1 block text-sm"
                   style={{ fontSize: "0.7rem" }}
                 >
                   Total
@@ -175,7 +175,7 @@ function AddNewItem() {
 
           <button
             type="button"
-            onClick={() => push({ itemName: "", quantity: "", price: "" })}
+            onClick={() => push({ name: "", quantity: "", price: "" })}
             className="rounded bg-blue-500 px-4 py-2 font-semibold text-white hover:bg-blue-600"
           >
             Add Item

@@ -1,7 +1,7 @@
 import { useField } from "formik";
 import PropTypes from "prop-types";
 
-const NewTextInput = ({ label, name, type, errors, touched }) => {
+const NewTextInput = ({ label, name, type, errors, touched, ...props }) => {
   const [field] = useField(name);
 
   return (
@@ -26,6 +26,7 @@ const NewTextInput = ({ label, name, type, errors, touched }) => {
             : "border-light-form-fieldBorder dark:border-dark-form-fieldBorder"
         } bg-light-form-fieldBg p-2 font-semibold text-light-text-bodyA dark:bg-dark-form-fieldBg dark:text-dark-text-bodyA`}
         {...field}
+        {...props}
       />
       {touched && errors ? (
         <div className="text-sm text-red-500">{errors}</div>

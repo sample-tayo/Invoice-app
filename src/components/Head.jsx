@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import FilterButton from "./FilterButton";
 
-export default function Head({ onNewInvoiceClick, data }) {
+export default function Head({ onNewInvoiceClick, data, onFilterChange }) {
   return (
     <div className="mx-8 mt-10 flex items-center justify-between  md:mx-0 md:mt-28 md:w-3/5">
       <div className="flex flex-col items-start justify-between">
@@ -14,11 +14,11 @@ export default function Head({ onNewInvoiceClick, data }) {
       </div>
 
       <div className="flex gap-10">
-        <FilterButton />
+        <FilterButton onFilterChange={onFilterChange} />
 
         <div
           onClick={onNewInvoiceClick}
-          className="bg-primary flex w-20 cursor-pointer flex-row items-center gap-1 rounded-3xl px-3 py-3  md:w-auto"
+          className="flex w-20 cursor-pointer flex-row items-center gap-1 rounded-3xl bg-primary px-3 py-3  md:w-auto"
         >
           <img
             src="/assets/images/icon-plus.svg"
@@ -36,4 +36,5 @@ export default function Head({ onNewInvoiceClick, data }) {
 Head.propTypes = {
   onNewInvoiceClick: PropTypes.func.isRequired,
   data: PropTypes.array.isRequired,
+  onFilterChange: PropTypes.func,
 };

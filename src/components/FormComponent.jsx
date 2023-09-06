@@ -20,6 +20,7 @@ const FormComponent = ({
 }) => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [disableValidation, setDisableValidation] = useState(false);
+  console.log("editInvoice:", editInvoice);
 
   const formRef = useRef(null); // Reference to the Form component, Ref introduced because of click outside
 
@@ -45,7 +46,7 @@ const FormComponent = ({
 
     // Convert quantity and price to numbers
     const items = values.items.map((item) => ({
-      itemName: item.itemName,
+      name: item.name,
       quantity: parseInt(item.quantity, 10),
       price: parseFloat(item.price),
       total: parseInt(item.quantity, 10) * parseFloat(item.price),
@@ -139,17 +140,17 @@ const FormComponent = ({
             style={{
               left: "0",
               position: "absolute",
-              height: "90vh",
+              height: "87vh",
               overflowY: "auto",
             }}
             className="mx-auto
             w-full space-y-4 overflow-y-auto bg-light-form-bg p-4  dark:bg-dark-form-bg md:w-3/6 md:px-12"
           >
             {/* Bill From */}
-            <section className="h-4/5 w-full overflow-y-auto">
+            <section className="h-4/5 w-full overflow-y-auto md:pr-4">
               <div className="p-4 md:p-0">
                 <h2
-                  className="text-primary mb-6 text-sm font-semibold"
+                  className="mb-6 text-sm font-semibold text-primary"
                   style={{ fontSize: "0.8rem" }}
                 >
                   Bill From:
@@ -157,14 +158,16 @@ const FormComponent = ({
 
                 <MyTextInput
                   label="Street Address"
-                  name="senderStreet"
+                  name={editInvoice ? `senderAddress.street` : "senderStreet"}
                   type="text"
+                  // value={editInvoice.senderAddress.street}
+                  // value={editInvoice?.senderAddress?.street || ""}
                 />
 
                 <div className="mt-2 flex gap-8  space-x-2">
                   <NewTextInput
                     label="City"
-                    name="senderCity"
+                    name={editInvoice ? "senderAddress.city" : "senderCity"}
                     type="text"
                     errors={errors.senderCity}
                     touched={touched.senderCity}
@@ -172,7 +175,9 @@ const FormComponent = ({
 
                   <NewTextInput
                     label="Post Code"
-                    name="senderPostCode"
+                    name={
+                      editInvoice ? "senderAddress.postCode" : "senderPostCode"
+                    }
                     type="text"
                     errors={errors.senderPostCode}
                     touched={touched.senderPostCode}
@@ -180,7 +185,9 @@ const FormComponent = ({
 
                   <NewTextInput
                     label="Country"
-                    name="senderCountry"
+                    name={
+                      editInvoice ? "senderAddress.country" : "senderCountry"
+                    }
                     type="text"
                     errors={errors.senderCountry}
                     touched={touched.senderCountry}
@@ -191,7 +198,7 @@ const FormComponent = ({
               {/* Bill To */}
               <div className=" p-4 md:p-0">
                 <h2
-                  className="text-primary mb-6 text-sm font-semibold"
+                  className="mb-6 text-sm font-semibold text-primary"
                   style={{ fontSize: "0.8rem" }}
                 >
                   Bill To:
@@ -203,13 +210,13 @@ const FormComponent = ({
                 {/* bill to street address */}
                 <MyTextInput
                   label="Street Address"
-                  name="clientStreet"
+                  name={editInvoice ? "clientAddress.street" : "clientStreet"}
                   type="clientStreet"
                 />
                 <div className="mt-2 flex gap-8  space-x-2">
                   <NewTextInput
                     label="City"
-                    name="clientCity"
+                    name={editInvoice ? "clientAddress.city" : "clientCity"}
                     type="text"
                     errors={errors.clientCity}
                     touched={touched.clientCity}
@@ -217,7 +224,9 @@ const FormComponent = ({
 
                   <NewTextInput
                     label="Post Code"
-                    name="clientPostCode"
+                    name={
+                      editInvoice ? "clientAddress.postCode" : "clientPostCode"
+                    }
                     type="text"
                     errors={errors.clientPostCode}
                     touched={touched.clientPostCode}
@@ -225,7 +234,9 @@ const FormComponent = ({
 
                   <NewTextInput
                     label="Country"
-                    name="clientCountry"
+                    name={
+                      editInvoice ? "clientAddress.country" : "clientCountry"
+                    }
                     type="text"
                     errors={errors.clientCountry}
                     touched={touched.clientCountry}
@@ -320,7 +331,7 @@ const FormComponent = ({
                       <button
                         type="button"
                         onClick={() =>
-                          push({ itemName: "", quantity: "", price: "" })
+                          push({ name: "", quantity: "", price: "" })
                         }
                         className="rounded-lg bg-light-btn-secondary-bg px-4 py-2 font-semibold text-light-btn-secondary-text
                       hover:bg-light-btn-secondary-hover
@@ -333,31 +344,34 @@ const FormComponent = ({
                 </FieldArray>
               </div>
             </section>
-            <div className="bg-backgroundDark fixed bottom-0 flex w-fit justify-between p-4">
-              <button
-                type="button"
-                onClick={() => {
-                  setShowForm(false);
-                  setSelectedDate(null);
-                }}
-                className="rounded-2xl bg-gray-300 p-2"
-              >
-                Discard
-              </button>
-              <div className="space-x-4">
+            <div className=" flex w-full justify-between bg-light-form-bg dark:bg-dark-form-bg">
+              <div className="">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowForm(false);
+                    setSelectedDate(null);
+                  }}
+                  className="p rounded-md bg-gray-300 p-1"
+                >
+                  Discard
+                </button>
+              </div>
+
+              <div className="flex justify-between  md:w-1/2">
                 <button
                   type="button"
                   onClick={() => handleSaveToDraft(values)}
-                  className="rounded-2xl bg-blue-500 p-2 text-white"
+                  className="rounded-md bg-blue-500 p-1 text-white"
                 >
-                  Save to Draft
+                  Save as Draft
                 </button>
 
                 <button
                   type="submit"
-                  className="rounded-2xl bg-green-500 p-2 text-white"
+                  className="rounded-md bg-green-500 p-1 text-white"
                 >
-                  Save & Send
+                  {editInvoice ? "Update" : "Save & Send"}
                 </button>
               </div>
             </div>
@@ -390,33 +404,33 @@ FormComponent.propTypes = {
   // }),
 
   editInvoice: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    createdAt: PropTypes.string.isRequired,
-    paymentDue: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired,
-    paymentTerms: PropTypes.number.isRequired,
-    clientName: PropTypes.string.isRequired,
-    senderStreet: PropTypes.string.isRequired,
-    clientEmail: PropTypes.string.isRequired,
-    status: PropTypes.oneOf(["draft", "pending", "paid"]).isRequired,
-    // senderAddress: PropTypes.shape({
-    //   street: PropTypes.string.isRequired,
-    //   city: PropTypes.string.isRequired,
-    //   postCode: PropTypes.string.isRequired,
-    //   country: PropTypes.string.isRequired,
-    // }).isRequired,
+    id: PropTypes.string,
+    createdAt: PropTypes.string,
+    paymentDue: PropTypes.string,
+    description: PropTypes.string,
+    paymentTerms: PropTypes.number,
+    clientName: PropTypes.string,
+    senderStreet: PropTypes.string,
+    clientEmail: PropTypes.string,
+    status: PropTypes.oneOf(["draft", "pending", "paid"]),
+    senderAddress: PropTypes.shape({
+      street: PropTypes.string,
+      city: PropTypes.string,
+      postCode: PropTypes.string,
+      country: PropTypes.string,
+    }),
     clientAddress: PropTypes.shape({
-      street: PropTypes.string.isRequired,
-      city: PropTypes.string.isRequired,
-      postCode: PropTypes.string.isRequired,
-      country: PropTypes.string.isRequired,
-    }).isRequired,
+      street: PropTypes.string,
+      city: PropTypes.string,
+      postCode: PropTypes.string,
+      country: PropTypes.string,
+    }),
     items: PropTypes.arrayOf(
       PropTypes.shape({
-        name: PropTypes.string.isRequired,
-        quantity: PropTypes.number.isRequired,
-        price: PropTypes.number.isRequired,
-        total: PropTypes.number.isRequired,
+        name: PropTypes.string,
+        quantity: PropTypes.number,
+        price: PropTypes.number,
+        total: PropTypes.number,
       }),
     ).isRequired,
     total: PropTypes.number.isRequired,

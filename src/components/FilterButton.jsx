@@ -1,15 +1,18 @@
 import { useState } from "react";
+import PropTypes from "prop-types";
 
-const FilterButton = () => {
+const FilterButton = ({ onFilterChange }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState("Filter");
 
-  const options = ["paid", "pending", "draft"];
+  const options = ["All", "paid", "pending", "draft"]; // Add "All" as an option
 
   const handleOptionClick = (option) => {
     setSelectedOption(option);
     setIsOpen(false);
-    // You can add more logic here to filter based on the selected option
+
+    // Notify the parent component about the selected filter
+    onFilterChange(option);
   };
 
   return (
@@ -60,5 +63,7 @@ const FilterButton = () => {
     </div>
   );
 };
-
+FilterButton.propTypes = {
+  onFilterChange: PropTypes.func,
+};
 export default FilterButton;

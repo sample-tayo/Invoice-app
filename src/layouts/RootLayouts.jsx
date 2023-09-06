@@ -1,11 +1,10 @@
-import PropTypes from "prop-types";
 import Sidebar from "../components/SideBar";
 import { Outlet } from "react-router-dom";
 
-export default function RootLayout({ toggleDarkMode }) {
+export default function RootLayout() {
   return (
-    <div className="bg-light-body-bg dark:bg-dark-body-bg flex flex-col bg-backgroundDark md:flex-row">
-      <Sidebar toggleDarkMode={toggleDarkMode} />
+    <div className="bg-backgroundDark flex flex-col bg-light-body-bg dark:bg-dark-body-bg md:flex-row">
+      <Sidebar />
 
       <main className="relative flex h-screen flex-1 flex-col items-center overflow-y-auto">
         <Outlet />
@@ -13,6 +12,3 @@ export default function RootLayout({ toggleDarkMode }) {
     </div>
   );
 }
-RootLayout.propTypes = {
-  toggleDarkMode: PropTypes.func.isRequired,
-};

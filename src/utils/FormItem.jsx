@@ -6,46 +6,46 @@ const FormItem = ({ index, item, errors, touched, remove }) => {
     return quantity * price;
   };
   return (
-    <div className="item flex gap-2" key={index}>
+    <div className="item flex gap-2 " key={index}>
       {/* Item Name */}
-      <div className="">
+      <div className=" w-1/3">
         <label
           className="mb-1 block text-sm text-light-text-formLabel dark:text-dark-text-formLabel"
           style={{ fontSize: "0.7rem" }}
-          htmlFor={`items.${index}.itemName`}
+          htmlFor={`items.${index}.name`}
         >
           Item Name
         </label>
         <Field
           type="text"
-          name={`items.${index}.itemName`}
-          className={`text-title-dark w-48
-          rounded border border-light-form-fieldBorder bg-light-form-fieldBg p-2 font-semibold
-          dark:border-dark-form-fieldBorder dark:bg-dark-form-fieldBg ${
+          name={`items.${index}.name`}
+          className={`w-full rounded border
+          border-light-form-fieldBorder bg-light-form-fieldBg p-2 font-semibold text-light-text-formLabel dark:border-dark-form-fieldBorder
+          dark:bg-dark-form-fieldBg dark:text-dark-text-formLabel ${
             errors.items &&
             errors.items[index] &&
-            errors.items[index].itemName &&
+            errors.items[index].name &&
             touched.items &&
             touched.items[index] &&
-            touched.items[index].itemName
+            touched.items[index].name
               ? "border-red-500"
               : ""
           }`}
         />
         {errors.items &&
           errors.items[index] &&
-          errors.items[index].itemName &&
+          errors.items[index].name &&
           touched.items &&
           touched.items[index] &&
-          touched.items[index].itemName && (
+          touched.items[index].name && (
             <div className="text-sm text-red-500">
-              {errors.items[index].itemName}
+              {errors.items[index].name}
             </div>
           )}
       </div>
 
       {/* Quantity */}
-      <div className="">
+      <div className="w-1/6">
         <label
           className="mb-1 block text-sm text-light-text-formLabel dark:text-dark-text-formLabel"
           style={{ fontSize: "0.7rem" }}
@@ -56,8 +56,8 @@ const FormItem = ({ index, item, errors, touched, remove }) => {
         <Field
           type="number"
           name={`items.${index}.quantity`}
-          className={` w-20 rounded border
-          border-light-form-fieldBorder bg-light-form-fieldBg p-2 font-semibold dark:border-dark-form-fieldBorder dark:bg-dark-form-fieldBg ${
+          className={`w-full rounded border border-light-form-fieldBorder bg-light-form-fieldBg
+          p-2 font-semibold text-light-text-formLabel dark:border-dark-form-fieldBorder dark:bg-dark-form-fieldBg dark:text-dark-text-formLabel ${
             errors.items &&
             errors.items[index] &&
             errors.items[index].quantity &&
@@ -81,9 +81,9 @@ const FormItem = ({ index, item, errors, touched, remove }) => {
       </div>
 
       {/* Price */}
-      <div className="">
+      <div className="w-1/6">
         <label
-          className="mb-1 block text-sm text-light-text-formLabel dark:text-dark-text-formLabel"
+          className="mb-1  block text-sm text-light-text-formLabel dark:text-dark-text-formLabel"
           style={{ fontSize: "0.7rem" }}
           htmlFor={`items.${index}.price`}
         >
@@ -92,8 +92,8 @@ const FormItem = ({ index, item, errors, touched, remove }) => {
         <Field
           type="number"
           name={`items.${index}.price`}
-          className={`w-32 rounded border
-          border-light-form-fieldBorder bg-light-form-fieldBg p-2 font-semibold dark:border-dark-form-fieldBorder dark:bg-dark-form-fieldBg ${
+          className={`w-full rounded border border-light-form-fieldBorder bg-light-form-fieldBg
+          p-2 font-semibold text-light-text-formLabel dark:border-dark-form-fieldBorder dark:bg-dark-form-fieldBg dark:text-dark-text-formLabel ${
             errors.items &&
             errors.items[index] &&
             errors.items[index].price &&
@@ -117,7 +117,7 @@ const FormItem = ({ index, item, errors, touched, remove }) => {
       </div>
 
       {/* Total */}
-      <div className="text-title-dark flex  w-20 flex-col">
+      <div className="flex w-1/5 flex-col  text-light-text-formLabel dark:text-dark-text-formLabel">
         <p
           className="mb-1 block text-sm text-light-text-formLabel dark:text-dark-text-formLabel"
           style={{ fontSize: "0.7rem" }}
@@ -130,11 +130,11 @@ const FormItem = ({ index, item, errors, touched, remove }) => {
       </div>
 
       {/* Delete Icon */}
-      <div className="my-auto">
+      <div className="m-auto">
         <button
           type="button"
           onClick={() => remove(index)}
-          className="text-delete border-none bg-transparent"
+          className="border-none bg-transparent text-delete"
         >
           <img src="/assets/images/icon-delete.svg" alt="delete-button" />
         </button>
@@ -146,13 +146,14 @@ const FormItem = ({ index, item, errors, touched, remove }) => {
 FormItem.propTypes = {
   index: PropTypes.number.isRequired,
   item: PropTypes.shape({
-    itemName: PropTypes.string,
+    name: PropTypes.string,
     quantity: PropTypes.number,
     price: PropTypes.number,
   }).isRequired,
   errors: PropTypes.object.isRequired,
   touched: PropTypes.object.isRequired,
   remove: PropTypes.func.isRequired,
+  // name: PropTypes.string,
 };
 
 export default FormItem;

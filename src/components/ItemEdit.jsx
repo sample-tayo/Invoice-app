@@ -42,6 +42,7 @@ const ItemEdit = ({
     },
     description,
   } = invoice;
+  console.log(invoice);
 
   const navigate = useNavigate();
   const handleDelete = () => {
@@ -118,7 +119,7 @@ const ItemEdit = ({
               </button>
               <button
                 type="button"
-                className="bg-delete hover:bg-delete-hover rounded px-4 py-2 text-sm font-semibold text-white"
+                className="rounded bg-delete px-4 py-2 text-sm font-semibold text-white hover:bg-delete-hover"
                 onClick={() => setShowDeleteModal(true)}
               >
                 Delete
@@ -133,7 +134,7 @@ const ItemEdit = ({
               <button
                 onClick={handleMarkAsPaid}
                 type="button"
-                className="bg-primary hover:bg-primaryHover rounded px-4 py-2 text-sm font-semibold text-white"
+                className="rounded bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primaryHover"
               >
                 Mark as Paid
               </button>
@@ -302,7 +303,7 @@ h-auto flex-col gap-8 rounded-md bg-light-form-fieldBg p-4 dark:bg-dark-form-fie
               </button>
               <button
                 type="button"
-                className="bg-delete hover:bg-delete-hover rounded px-4 py-2 text-sm font-semibold text-white"
+                className="rounded bg-delete px-4 py-2 text-sm font-semibold text-white hover:bg-delete-hover"
                 onClick={() => setShowDeleteModal(true)}
               >
                 Delete
@@ -317,7 +318,7 @@ h-auto flex-col gap-8 rounded-md bg-light-form-fieldBg p-4 dark:bg-dark-form-fie
               <button
                 onClick={handleMarkAsPaid}
                 type="button"
-                className="bg-primary hover:bg-primaryHover rounded px-4 py-2 text-sm font-semibold text-white"
+                className="rounded bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primaryHover"
               >
                 Mark as Paid
               </button>

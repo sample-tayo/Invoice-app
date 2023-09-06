@@ -10,36 +10,30 @@ import {
 
 import ItemEdit from "./components/ItemEdit";
 import data from "./data/data.json";
+import generateUniqueId from "./utils/GenerateId";
 
 export default function App() {
   const [invoicesData, setInvoicesData] = useState(data);
   const [showForm, setShowForm] = useState(false);
-  function generateUniqueId() {
-    const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    const randomAlphabets = Array.from(
-      { length: 2 },
-      () => alphabet[Math.floor(Math.random() * alphabet.length)],
-    ).join("");
-
-    const randomNumbers = Array.from({ length: 4 }, () =>
-      Math.floor(Math.random() * 10),
-    ).join("");
-
-    return randomAlphabets + randomNumbers;
-  }
 
   const addInvoice = (newInvoice) => {
     // Generate a unique ID for the new invoice
     newInvoice.id = generateUniqueId();
 
-    // Calculate the total for the new invoice based on the items
-    newInvoice.total = newInvoice.items.reduce(
-      (acc, item) => acc + item.total,
-      0,
+    // Check if an invoice with the same ID already exists
+    const existingIndex = invoicesData.findIndex(
+      (invoice) => invoice.id === newInvoice.id,
     );
 
-    // Add the new invoice to the invoicesData state
-    setInvoicesData((prevData) => [...prevData, newInvoice]);
+    if (existingIndex !== -1) {
+      // Replace the existing invoice with the new one
+      const updatedInvoices = [...invoicesData];
+      updatedInvoices[existingIndex] = newInvoice;
+      setInvoicesData(updatedInvoices);
+    } else {
+      // Add the new invoice to the invoicesData state
+      setInvoicesData((prevData) => [...prevData, newInvoice]);
+    }
   };
 
   // func to delete items from the data

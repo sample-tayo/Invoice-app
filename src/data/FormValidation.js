@@ -15,16 +15,9 @@ export const validationSchema = Yup.object().shape({
   paymentTerms: Yup.string().required("Payment Terms is required"),
   items: Yup.array().of(
     Yup.object().shape({
-      itemName: Yup.string().required("Item Name is required"),
-      quantity: Yup.number()
-        .min(1, "Quantity must be at least 1")
-        .required("Quantity is required")
-        .positive()
-        .integer(),
-      price: Yup.number()
-        .min(0.01, "Price must be at least 0.01")
-        .required("Price is required")
-        .positive(),
+      name: Yup.string().required("required"),
+      quantity: Yup.number().min(1, "Qty").required("Qty").positive().integer(),
+      price: Yup.number().min(0.01, "min 0.01").required("Price").positive(),
     }),
   ),
 });
@@ -42,5 +35,5 @@ export const initialValues = {
   clientCountry: "",
   description: "",
   // initial values for item qty
-  items: [{ itemName: "", quantity: 0, price: 0.0 }],
+  items: [{ name: "", quantity: 0, price: 0.0 }],
 };

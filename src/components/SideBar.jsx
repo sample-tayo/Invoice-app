@@ -1,9 +1,8 @@
-import PropTypes from "prop-types";
 import ThemeSwitcher from "./ThemeSwitcher";
 
 export default function Sidebar() {
   return (
-    <aside className="bg-light-sidebar-bg dark:bg-dark-sidebar-bg sticky top-0 z-30 h-auto w-screen px-4  md:h-screen md:w-24 md:px-0">
+    <aside className="sticky top-0 z-30 h-auto w-screen bg-light-sidebar-bg px-4 dark:bg-dark-sidebar-bg  md:h-screen md:w-24 md:px-0">
       <nav className="flex h-full flex-row items-center justify-between shadow-sm md:flex-col">
         <img
           src="/assets/images/newlogo.svg"
@@ -23,6 +22,3 @@ export default function Sidebar() {
     </aside>
   );
 }
-Sidebar.propTypes = {
-  toggleDarkMode: PropTypes.func.isRequired,
-};
