@@ -34,6 +34,7 @@ export const initialValues = {
   clientPostCode: "",
   clientCountry: "",
   description: "",
+  paymentTerms: 7,
   // initial values for item qty
   items: [{ name: "", quantity: 0, price: 0.0 }],
 };

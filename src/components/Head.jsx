@@ -1,7 +1,11 @@
 import PropTypes from "prop-types";
 import FilterButton from "./FilterButton";
+import { useContext } from "react";
+import AppContext from "../contexts/AppContext";
 
-export default function Head({ onNewInvoiceClick, data, onFilterChange }) {
+export default function Head({ onFilterChange }) {
+  const { openForm, invoicesData } = useContext(AppContext);
+
   return (
     <div className="mx-8 mt-10 flex items-center justify-between  md:mx-0 md:mt-28 md:w-3/5">
       <div className="flex flex-col items-start justify-between">
@@ -9,7 +13,7 @@ export default function Head({ onNewInvoiceClick, data, onFilterChange }) {
           Invoices
         </h2>
         <p className="text-xs text-light-text-bodyA dark:text-dark-text-bodyA">
-          There are {data.length} total Invoices
+          There are {invoicesData.length} total Invoices
         </p>
       </div>
 
@@ -17,7 +21,7 @@ export default function Head({ onNewInvoiceClick, data, onFilterChange }) {
         <FilterButton onFilterChange={onFilterChange} />
 
         <div
-          onClick={onNewInvoiceClick}
+          onClick={openForm}
           className="flex w-20 cursor-pointer flex-row items-center gap-1 rounded-3xl bg-primary px-3 py-3  md:w-auto"
         >
           <img
@@ -34,7 +38,7 @@ export default function Head({ onNewInvoiceClick, data, onFilterChange }) {
   );
 }
 Head.propTypes = {
-  onNewInvoiceClick: PropTypes.func.isRequired,
-  data: PropTypes.array.isRequired,
+  openForm: PropTypes.func,
+  invoicesData: PropTypes.array,
   onFilterChange: PropTypes.func,
 };

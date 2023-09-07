@@ -1,26 +1,27 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
+import { Formik, Field, Form, ErrorMessage, FieldArray } from "formik";
+import AppContext from "../contexts/AppContext";
 import styles from "./FormComponent.module.css";
 import PropTypes from "prop-types";
-import { Formik, Field, Form, ErrorMessage, FieldArray } from "formik";
+
+// import initialvalues and the validation schema
+import { initialValues, validationSchema } from "../data/FormValidation";
+
 // datepicker library import
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { format } from "date-fns";
+
+// utils
 import MyTextInput from "../utils/MyTextInput";
 import NewTextInput from "../utils/NewTextInput";
 import FormItem from "../utils/FormItem";
-import { initialValues, validationSchema } from "../data/FormValidation";
 
-const FormComponent = ({
-  showForm,
-  setShowForm,
-  fromSidebar,
-  addInvoice,
-  editInvoice,
-}) => {
+const FormComponent = ({ editInvoice }) => {
+  const { showForm, setShowForm, addInvoice } = useContext(AppContext);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [disableValidation, setDisableValidation] = useState(false);
-  console.log("editInvoice:", editInvoice);
+  // console.log("editInvoice:", editInvoice);
 
   const formRef = useRef(null); // Reference to the Form component, Ref introduced because of click outside
 
@@ -84,12 +85,14 @@ const FormComponent = ({
     return newInvoice;
   }
 
-  function handleSubmit(values) {
+  function handleSubmit(values, { resetForm }) {
     // Call createNewInvoice to create a new invoice with status "pending"
     const newInvoice = createNewInvoice(values, "pending");
 
     // Call the addInvoice function with the new invoice data
     addInvoice(newInvoice);
+
+    resetForm();
 
     // Close the form
     setShowForm(false);
@@ -123,7 +126,7 @@ const FormComponent = ({
       className={`fixed h-full bg-black bg-opacity-50 transition-transform duration-300 ease-linear md:top-0 ${
         showForm
           ? "translate-x-0 transform md:translate-x-14"
-          : `transform ${fromSidebar ? "-" : ""}translate-x-full`
+          : `transform ${showForm ? "-" : ""}translate-x-full`
       } ${styles.container}`}
     >
       <h3 className="text-title-dark w-full bg-light-form-bg pb-8 pl-8 pt-5 text-3xl font-extrabold text-light-text-heading dark:bg-dark-form-bg dark:text-dark-text-heading  md:w-3/6 md:px-12 md:pt-8">
@@ -134,7 +137,7 @@ const FormComponent = ({
         onSubmit={handleSubmit}
         initialValues={editInvoice || initialValues}
       >
-        {({ values, errors, touched }) => (
+        {({ values, errors, touched, resetForm }) => (
           <Form
             ref={formRef}
             style={{
@@ -160,8 +163,6 @@ const FormComponent = ({
                   label="Street Address"
                   name={editInvoice ? `senderAddress.street` : "senderStreet"}
                   type="text"
-                  // value={editInvoice.senderAddress.street}
-                  // value={editInvoice?.senderAddress?.street || ""}
                 />
 
                 <div className="mt-2 flex gap-8  space-x-2">
@@ -351,6 +352,7 @@ const FormComponent = ({
                   onClick={() => {
                     setShowForm(false);
                     setSelectedDate(null);
+                    resetForm();
                   }}
                   className="p rounded-md bg-gray-300 p-1"
                 >
@@ -361,7 +363,10 @@ const FormComponent = ({
               <div className="flex justify-between  md:w-1/2">
                 <button
                   type="button"
-                  onClick={() => handleSaveToDraft(values)}
+                  onClick={() => {
+                    handleSaveToDraft(values);
+                    resetForm();
+                  }}
                   className="rounded-md bg-blue-500 p-1 text-white"
                 >
                   Save as Draft
@@ -383,25 +388,9 @@ const FormComponent = ({
 };
 
 FormComponent.propTypes = {
-  showForm: PropTypes.bool.isRequired,
-  setShowForm: PropTypes.any.isRequired,
+  showForm: PropTypes.bool,
+  setShowForm: PropTypes.any,
   addInvoice: PropTypes.func,
-  fromSidebar: PropTypes.bool.isRequired,
-
-  // onCloseForm: PropTypes.func.isRequired,
-  // editInvoice: PropTypes.shape({
-  //   senderStreet: PropTypes.string.isRequired,
-  //   senderCity: PropTypes.string.isRequired,
-  //   senderPostCode: PropTypes.string.isRequired,
-  //   senderCountry: PropTypes.string.isRequired,
-  //   clientName: PropTypes.string.isRequired,
-  //   clientStreet: PropTypes.string.isRequired,
-  //   clientCity: PropTypes.string.isRequired,
-  //   clientPostCode: PropTypes.string.isRequired,
-  //   clientCountry: PropTypes.string.isRequired,
-  //   description: PropTypes.string.isRequired,
-  //   paymentTerms: PropTypes.string.isRequired,
-  // }),
 
   editInvoice: PropTypes.shape({
     id: PropTypes.string,

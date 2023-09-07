@@ -3,15 +3,11 @@ import { useState } from "react";
 import Head from "../components/Head";
 import InvoicesList from "../components/InvoiceList";
 import FormComponent from "../components/FormComponent";
+import { useContext } from "react";
+import AppContext from "../contexts/AppContext";
 
-function Home({
-  openForm,
-  invoicesData,
-  setInvoicesData,
-  showForm,
-  setShowForm,
-  addInvoice,
-}) {
+function Home() {
+  const { invoicesData } = useContext(AppContext);
   const [filter, setFilter] = useState("All"); // Initially, show all invoices
 
   // Function to handle filter changes
@@ -30,36 +26,17 @@ function Home({
 
   return (
     <>
-      <Head
-        onNewInvoiceClick={openForm}
-        data={invoicesData}
-        onFilterChange={handleFilterChange}
-      />
-      <InvoicesList
-        data={invoicesData}
-        setInvoicesData={setInvoicesData}
-        invoicesData={filteredInvoices}
-      />
-      <FormComponent
-        showForm={showForm}
-        setShowForm={setShowForm}
-        fromSidebar={showForm}
-        addInvoice={addInvoice}
-      />
+      <Head onFilterChange={handleFilterChange} />
+
+      <InvoicesList filteredInvoices={filteredInvoices} />
+
+      <FormComponent />
     </>
   );
 }
-Home.propTypes = {
-  showForm: PropTypes.bool.isRequired,
-  setShowForm: PropTypes.any.isRequired,
-  fromSidebar: PropTypes.bool.isRequired,
-};
 
 Home.propTypes = {
-  openForm: PropTypes.func.isRequired,
-  invoicesData: PropTypes.array.isRequired,
-  setInvoicesData: PropTypes.func.isRequired,
-  addInvoice: PropTypes.func.isRequired,
+  invoicesData: PropTypes.array,
 };
 
 export default Home;

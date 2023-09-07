@@ -3,16 +3,19 @@ import GoBack from "./GoBack";
 import { useState } from "react";
 import PropTypes from "prop-types";
 import FormComponent from "./FormComponent";
+import { useContext } from "react";
+import AppContext from "../contexts/AppContext";
 
-const ItemEdit = ({
-  removeFromInvoicesData,
-  invoicesData,
-  setInvoicesData,
-  onClickEditForm,
-  // space
-  showForm,
-  setShowForm,
-}) => {
+const ItemEdit = () => {
+  const {
+    showForm,
+    setShowForm,
+    invoicesData,
+    setInvoicesData,
+    removeFromInvoicesData,
+    openForm,
+  } = useContext(AppContext);
+
   const { id } = useParams(); // Get the invoice ID from URL parameters
 
   // Find the corresponding invoice data
@@ -46,11 +49,11 @@ const ItemEdit = ({
 
   const navigate = useNavigate();
   const handleDelete = () => {
-    // Call the removeFromInvoicesData function with the item's id
+    // Call the removeFromInvoicesData function with the items id
     removeFromInvoicesData(id);
-    setShowDeleteModal(false); // Close the modal after deletion
+    setShowDeleteModal(false); // Closing the modal after deleting
 
-    // Using history.push to navigate back to the home page
+    // Using history.push to navigate back to the home page after action
     navigate("/");
   };
 
@@ -74,7 +77,7 @@ const ItemEdit = ({
   };
 
   const handleEditForm = () => {
-    onClickEditForm(); // Call the onClickEditForm prop to toggle showForm
+    openForm(); // Call the openForm prop to toggle showForm
   };
 
   return (
@@ -342,11 +345,11 @@ export default ItemEdit;
 function DeleteConfirmationModal({ onClose, onDelete }) {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-border-dark w-80 rounded-lg p-6">
+      <div className="w-80 rounded-lg bg-light-popup-bg p-6 dark:bg-dark-popup-bg">
         <h2 className="mb-4 text-xl font-semibold text-light-text-placeholder dark:text-dark-text-placeholder">
           Confirm Deletion
         </h2>
-        <p className="text-dark mb-4 text-sm">
+        <p className="mb-4 text-sm text-light-text-bodyA dark:text-dark-text-bodyA">
           Are you sure you want to delete this invoice? This action cannot be
           undone.
         </p>
@@ -358,7 +361,7 @@ function DeleteConfirmationModal({ onClose, onDelete }) {
             Cancel
           </button>
           <button
-            className="rounded-md bg-red-500 px-4 py-2 text-white hover:bg-red-600"
+            className="rounded-md bg-delete px-4 py-2 text-white hover:bg-delete-hover hover:bg-red-600"
             onClick={onDelete}
           >
             Delete
@@ -370,50 +373,50 @@ function DeleteConfirmationModal({ onClose, onDelete }) {
 }
 
 DeleteConfirmationModal.propTypes = {
-  onClose: PropTypes.func.isRequired,
-  onDelete: PropTypes.func.isRequired,
+  onClose: PropTypes.func,
+  onDelete: PropTypes.func,
 };
 
 ItemEdit.propTypes = {
-  invoicesData: PropTypes.array.isRequired,
-  setInvoicesData: PropTypes.func.isRequired,
+  invoicesData: PropTypes.array,
+  setInvoicesData: PropTypes.func,
 
-  onClickEditForm: PropTypes.func.isRequired,
-  showForm: PropTypes.bool.isRequired,
-  setShowForm: PropTypes.any.isRequired,
-  fromSidebar: PropTypes.bool.isRequired,
-  // openForm: PropTypes.func.isRequired,
+  onClickEditForm: PropTypes.func,
+  showForm: PropTypes.bool,
+  setShowForm: PropTypes.any,
+  fromSidebar: PropTypes.bool,
+  // openForm: PropTypes.func,
 
-  // handleMarkAsPaid: PropTypes.func.isRequired,
-  removeFromInvoicesData: PropTypes.func.isRequired,
+  // handleMarkAsPaid: PropTypes.func,
+  removeFromInvoicesData: PropTypes.func,
   data: PropTypes.arrayOf(
     PropTypes.shape({
-      status: PropTypes.string.isRequired,
-      createdAt: PropTypes.string.isRequired,
-      paymentDue: PropTypes.string.isRequired,
-      clientName: PropTypes.string.isRequired,
+      status: PropTypes.string,
+      createdAt: PropTypes.string,
+      paymentDue: PropTypes.string,
+      clientName: PropTypes.string,
       senderAddress: PropTypes.shape({
-        street: PropTypes.string.isRequired,
-        city: PropTypes.string.isRequired,
-        postCode: PropTypes.string.isRequired,
-        country: PropTypes.string.isRequired,
-      }).isRequired,
+        street: PropTypes.string,
+        city: PropTypes.string,
+        postCode: PropTypes.string,
+        country: PropTypes.string,
+      }),
       clientAddress: PropTypes.shape({
-        street: PropTypes.string.isRequired,
-        city: PropTypes.string.isRequired,
-        postCode: PropTypes.string.isRequired,
-        country: PropTypes.string.isRequired,
-      }).isRequired,
-      clientEmail: PropTypes.string.isRequired,
+        street: PropTypes.string,
+        city: PropTypes.string,
+        postCode: PropTypes.string,
+        country: PropTypes.string,
+      }),
+      clientEmail: PropTypes.string,
       items: PropTypes.arrayOf(
         PropTypes.shape({
-          name: PropTypes.string.isRequired,
-          quantity: PropTypes.number.isRequired,
-          price: PropTypes.number.isRequired,
-          total: PropTypes.number.isRequired,
+          name: PropTypes.string,
+          quantity: PropTypes.number,
+          price: PropTypes.number,
+          total: PropTypes.number,
         }),
-      ).isRequired,
-      total: PropTypes.number.isRequired,
+      ),
+      total: PropTypes.number,
     }),
-  ).isRequired,
+  ),
 };
