@@ -5,9 +5,9 @@ import Invoice from "./Invoice";
 function InvoicesList({ filteredInvoices }) {
   return (
     <div className="flex w-full flex-col-reverse gap-4 p-8 md:w-9/12">
-      {filteredInvoices.map((invoice, index) => (
+      {filteredInvoices.map((invoice) => (
         <Link to={`/invoices/${invoice.id}`} key={invoice.id}>
-          <Invoice invoice={invoice} isFirst={index === 0} />
+          <Invoice invoice={invoice} />
         </Link>
       ))}
     </div>
